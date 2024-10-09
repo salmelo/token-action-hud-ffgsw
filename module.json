@@ -4,16 +4,19 @@
   "description": "Token Action HUD is a repositionable HUD of actions for a selected token",
   "authors": [
     {
-      "name": "Balebos",
+      "name": "Balebos"
     }
   ],
-  "version": "1.0.1.903",
+  "version": "12.0.0.1_903",
   "compatibility": {
     "minimum": "12",
     "verified": "12"
   },
   "esmodules": [
     "./scripts/init.js"
+  ],
+  "styles": [
+    "./styles/tah-template-style.css"
   ],
   "languages": [
     {
@@ -24,8 +27,7 @@
     {
       "lang": "fr",
       "name": "French (Français)",
-      "path": "lang/fr.json",
-      "flags": {}
+      "path": "lang/fr.json"
     }
   ],
   "relationships": {
@@ -59,8 +61,7 @@
 		"url": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
 		"thumbnail": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp"
 	}],
-  "url": "This is auto replaced",
-  "manifest": "manifet",
-  "download": "dowload",
-  "readme": "https://github.com/Larkinabout/fvtt-token-action-hud-template#readme"
+  "url": "https://github.com/TeddyBears/token-action-hud-ffgsw",
+  "manifest": "https://raw.githubusercontent.com/TeddyBears/token-action-hud-ffgsw/refs/heads/main/module.json",
+  "download": "https://github.com/TeddyBears/token-action-hud-ffgsw/archive/refs/tags/12.0.0.1_903.zip"
 }

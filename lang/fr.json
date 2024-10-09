@@ -1,0 +1,21 @@
+{
+  "tokenActionHud": {
+    "template": {
+      "armor": "Armure",
+      "containers": "Containers",
+      "consumables": "Consommables",
+      "equipment": "Equipment",
+      "inventory": "Inventaire",
+      "item": "Objet",
+      "weapons": "Armes",
+      "treasure": "Trésors",
+      "skills": "Compétences",
+      "settings": {
+        "displayUnequipped": {
+          "hint": "Sélectionner pour afficher les armes non équipé",
+          "name": "Afficher non-équipé"
+        }
+      }
+    }
+  }
+}
