@@ -1,0 +1,66 @@
+{
+  "id": "token-action-hud-ffgsw",
+  "title": "Token Action HUD for FFG Star Wars",
+  "description": "Token Action HUD is a repositionable HUD of actions for a selected token",
+  "authors": [
+    {
+      "name": "Balebos",
+    }
+  ],
+  "version": "1.0.1.903",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "12"
+  },
+  "esmodules": [
+    "./scripts/init.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "fr",
+      "name": "French (Français)",
+      "path": "lang/fr.json",
+      "flags": {}
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+				"id": "starwarsffg",
+				"manifest": "https://raw.githubusercontent.com/StarWarsFoundryVTT/StarWarsFFG/master/system.json",
+				"type": "system",
+				"compatibility": {
+					"minimum": "1.901",
+					"verified": "1.903"
+				}
+			}
+    ],
+    "requires": [
+      {
+        "id": "token-action-hud-core",
+        "type": "module",
+        "compatibility": [
+          {
+            "minimum": "1.5.0",
+            "maximum": "1.5",
+            "verified": "1.5.0"
+          }
+        ]
+      }
+    ]
+  },
+  "media": [{
+		"type": "setup",
+		"url": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
+		"thumbnail": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp"
+	}],
+  "url": "This is auto replaced",
+  "manifest": "manifet",
+  "download": "dowload",
+  "readme": "https://github.com/Larkinabout/fvtt-token-action-hud-template#readme"
+}
