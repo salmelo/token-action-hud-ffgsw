@@ -51,6 +51,7 @@ export const ITEM_TYPE = {
     // consumable: { groupId: 'consumables' },
     gear: { groupId: 'gear' },
     weapon: { groupId: 'weapons' },
+    shipweapon: { groupId: 'weapons' },
 }
 
 /**

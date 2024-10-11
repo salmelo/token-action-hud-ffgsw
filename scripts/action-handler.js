@@ -16,8 +16,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {array} groupIds
          */a
         async buildSystemActions(groupIds) {
+            console.log(this)
             // Set actor and token variables
-            this.actors = (!this.actor) ? this._getActors() : [this.actor]
+            this.actors = (!this.actor) ? this.#getActors() : [this.actor]
             this.actorType = this.actor?.type
             // Settings
             this.displayUnequipped = Utils.getSetting('displayUnequipped')
@@ -47,7 +48,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             await Promise.all([
                 this.#buildInventory(),
             ])
-            this.#buildSkills()
+            if (this.actorType !== 'vehicle') {
+                this.#buildSkills()
+            }
+
         }
 
         /**
@@ -63,6 +67,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         async #buildInventory() {
+            
             if (this.items.size === 0) return
 
             const actionTypeId = 'item'
@@ -87,7 +92,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const groupData = { id: groupId, type: 'system' }
 
                 // Get actions
-                const actions = [...typeMap].map(([itemId, itemData]) => {                    
+                const actions = [...typeMap].map(([itemId, itemData]) => {
                     const id = itemId
                     const name = itemData.name
                     const actionTypeName = coreModule.api.Utils.i18n(ACTION_TYPE[actionTypeId])
@@ -155,6 +160,22 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     return null
                 }
 
+            }
+        }
+
+        /**
+* Get actors
+* @private
+* @returns {object}
+*/
+        #getActors() {
+            const allowedTypes = ['character', 'npc']
+            const tokens = coreModule.api.Utils.getControlledTokens()
+            const actors = tokens?.filter(token => token.actor).map((token) => token.actor)
+            if (actors.every((actor) => allowedTypes.includes(actor.type))) {
+                return actors
+            } else {
+                return []
             }
         }
     }
