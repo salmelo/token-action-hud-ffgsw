@@ -16,7 +16,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {array} groupIds
          */a
         async buildSystemActions(groupIds) {
-            console.log(this)
             // Set actor and token variables
             this.actors = (!this.actor) ? this.#getActors() : [this.actor]
             this.actorType = this.actor?.type
@@ -30,7 +29,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this.items = items
             }
 
-            if (this.actorType === 'character' || this.actorType === 'minion' || this.actorType === 'rival' || this.actorType === 'nemesis') {
+            if (this.actorType === 'character' || this.actorType === 'minion' || this.actorType === 'rival' || this.actorType === 'nemesis' || this.actorType === 'vehicle') {
                 this.inventorygroupIds = [
                     'weapons'
                 ]
@@ -50,6 +49,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             ])
             if (this.actorType !== 'vehicle') {
                 this.#buildSkills()
+            } else {
+                this.#buildCrewSkills()
             }
 
         }
@@ -67,7 +68,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         async #buildInventory() {
-            
             if (this.items.size === 0) return
 
             const actionTypeId = 'item'
@@ -124,7 +124,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const skills = this.actor.system.skills
             const actionType = 'skill'
             const categoriesSkillsList = this.actor.system.skilltypes
-            for (const [catId, category] of Object.entries(categoriesSkillsList)) {
+            for (const [actionId, category] of Object.entries(categoriesSkillsList)) {
                 try {
                     // Create group data  SWFFG.SkillsCombat
                     const groupData = {
@@ -138,8 +138,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     Object.entries(skills).map((skill) => {
 
                         if (skill[1].type === category.type) {
-                            const id = skill[1].value;
-                            const encodedValue = [actionType, id].join(this.delimiter)
+                            const id = [skill[1].value, actionId].join('-');
+                            const encodedValue = [actionType, skill[1].value].join(this.delimiter)
                             const name = skill[1].label
                             const actionTypeName = `${coreModule.api.Utils.i18n('SWFFG.Skills')}: ` ?? ''
                             const listName = `${actionTypeName}${name}`
@@ -156,7 +156,74 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     // Add actions to HUD
                     this.addActions(actions, groupData)
                 } catch (error) {
-                    coreModule.api.Logger.error(catId)
+                    coreModule.api.Logger.error(actionId)
+                    return null
+                }
+
+            }
+
+        }
+
+        /**
+         * Build Crew skills
+         * @private
+         */
+        async #buildCrewSkills() {
+            //if (this.actorType !== 'character') return
+            const ship = this.actor;
+            const crew = await ship.getFlag("starwarsffg", "crew");
+            if (!crew || crew.length === 0) {
+                CONFIG.logger.warn("Could not find crew for vehicle or could not find relevant skill; presenting default roller");
+                return;
+            }
+            const actionType = 'skill'
+            // Create group data  SWFFG.SkillsCombat
+            const groupData = {
+                id: "General",
+                name: "category.label",
+                type: 'system'
+            }
+            for (const [actionId, values] of Object.entries(crew)) {
+                try {
+                    // Create actions list
+                    let actions = new Array()
+                    let skillRole = "";
+                    let skill = "";
+                    let use_handling = false;
+                    if (values.role === 'Pilot') {
+                        use_handling = true;
+                        if (ship?.system?.spaceShip) {
+                            skill = "Piloting: Space";
+                        } else {
+                            skill = "Piloting: Planetary";
+                        }
+                    } else {                        
+                        skillRole = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_name === values.role);
+                        skill = skillRole[0].role_skill
+                        use_handling = skillRole[0].use_handling
+                    }
+
+                    const name = `${skill} (${values.actor_name})`
+                    const id = [skill, actionId].join('-');
+                    const crewActorId = values.actor_id
+                    const crewActor = game.actors.get(crewActorId);
+                    const encodedValue = [actionType, skill, crewActorId,use_handling].join(this.delimiter)
+                    const actionTypeName = `${coreModule.api.Utils.i18n('SWFFG.Skills')}: ` ?? ''
+                    const listName = `${actionTypeName}${name}`
+                    const img = coreModule.api.Utils.getImage(crewActor.img)
+
+
+                    actions.push({
+                        id: id,
+                        name: name,
+                        encodedValue: encodedValue,
+                        listName: listName,
+                        img: img
+                    })
+                    // Add actions to HUD
+                    this.addActions(actions, groupData)
+                } catch (error) {
+                    coreModule.api.Logger.error(actionId)
                     return null
                 }
 
@@ -164,10 +231,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /**
-* Get actors
-* @private
-* @returns {object}
-*/
+        * Get actors
+        * @private
+        * @returns {object}
+        */
         #getActors() {
             const allowedTypes = ['character', 'npc']
             const tokens = coreModule.api.Utils.getControlledTokens()

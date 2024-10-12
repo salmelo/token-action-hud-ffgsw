@@ -27,6 +27,9 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 
 **IMPORTANT** - Token Action HUD Template requires the [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) module to be installed.
 
+# Changelog
+Changelog are available [here](https://github.com/TeddyBears/token-action-hud-ffgsw/blob/main/CHANGELOG.md)
+
 # Support
 
 For a guide on using Token Action HUD, go to: [How to Use Token Action HUD](https://github.com/Larkinabout/fvtt-token-action-hud-core/wiki/How-to-Use-Token-Action-HUD)
