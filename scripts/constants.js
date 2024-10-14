@@ -36,7 +36,7 @@ export const GROUP = {
     combat: { id: 'combat', name: 'tokenActionHud.combat', type: 'system' },
     token: { id: 'token', name: 'tokenActionHud.token', type: 'system' },
     utility: { id: 'utility', name: 'tokenActionHud.utility', type: 'system' },
-    //skills: { id: 'skills', name: 'SWFFG.Skills', type: 'system' },
+    crewskills: { id: 'crewskills', name: 'SWFFG.Crew.Title', type: 'system' },
     general: { id: 'General', name:"SWFFG.SkillsGeneral", type: 'system' },
     social: { id: 'Social', name:"SWFFG.SkillsSocial", type: 'system' },
     knowledge: { id: 'Knowledge', name:"SWFFG.SkillsKnowledge", type: 'system' },

@@ -123,7 +123,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         #buildSkills() {
-            if (this.actorType !== 'character') return
+            //if (this.actorType !== 'character') return
 
             const skills = this.actor.system.skills
             const actionType = 'skill'
@@ -179,7 +179,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const actionType = 'skill'
             // Create group data  SWFFG.SkillsCombat
             const groupData = {
-                id: "General",
+                id: "crewskills",
                 name: "category.label",
                 type: 'system'
             }
