@@ -18,7 +18,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async buildSystemActions(groupIds) {
             // Set actor and token variables
             this.actors = (!this.actor) ? this.#getActors() : [this.actor]
+            this.tokens = (!this.token) ? this.#getTokens() : [this.token]
+
             this.actorType = this.actor?.type
+
+
             // Settings
             this.displayUnequipped = Utils.getSetting('displayUnequipped')
 
@@ -119,42 +123,38 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         #buildSkills() {
-            //if (this.actorType !== 'character') return
+            if (this.actorType !== 'character') return
 
             const skills = this.actor.system.skills
             const actionType = 'skill'
             const categoriesSkillsList = this.actor.system.skilltypes
             for (const [actionId, category] of Object.entries(categoriesSkillsList)) {
                 try {
-                    // Create group data  SWFFG.SkillsCombat
-                    const groupData = {
-                        id: category.type,
-                        name: category.label,
-                        type: 'system'
+                // Create group data  SWFFG.SkillsCombat
+                const groupData = {
+                    id: category.type,
+                    name: category.label,
+                    type: 'system'
+                }
+                const categorizedSkills = Object.entries(skills).filter(skill => skill[1].type === category.type)
+                const actions = Object.entries(categorizedSkills).map((skill) => {
+                    const id = skill[1][1].value
+                    const encodedValue = [actionType, id].join(this.delimiter)
+                    const name = skill[1][1].label
+                    const actionTypeName = `${coreModule.api.Utils.i18n('SWFFG.Skills')}: ` ?? ''
+                    const listName = `${actionTypeName}${name}`
+                    const tooltip = "ddd"
+        
+                    return {
+                      id,
+                      name,
+                      encodedValue,
+                      listName,
+                      tooltip
                     }
-
-                    // Create actions list
-                    let actions = new Array()
-                    Object.entries(skills).map((skill) => {
-
-                        if (skill[1].type === category.type) {
-                            const id = [skill[1].value, actionId].join('-');
-                            const encodedValue = [actionType, skill[1].value].join(this.delimiter)
-                            const name = skill[1].label
-                            const actionTypeName = `${coreModule.api.Utils.i18n('SWFFG.Skills')}: ` ?? ''
-                            const listName = `${actionTypeName}${name}`
-
-                            actions.push({
-                                id: id,
-                                name: name,
-                                encodedValue: encodedValue,
-                                listName: listName
-                            })
-                        }
-
-                    })
-                    // Add actions to HUD
-                    this.addActions(actions, groupData)
+                  })
+                // Add actions to HUD
+                this.addActions(actions, groupData)
                 } catch (error) {
                     coreModule.api.Logger.error(actionId)
                     return null
@@ -197,7 +197,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         } else {
                             skill = "Piloting: Planetary";
                         }
-                    } else {                        
+                    } else {
                         skillRole = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_name === values.role);
                         skill = skillRole[0].role_skill
                         use_handling = skillRole[0].use_handling
@@ -207,7 +207,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const id = [skill, actionId].join('-');
                     const crewActorId = values.actor_id
                     const crewActor = game.actors.get(crewActorId);
-                    const encodedValue = [actionType, skill, crewActorId,use_handling].join(this.delimiter)
+                    const encodedValue = [actionType, skill, crewActorId, use_handling].join(this.delimiter)
                     const actionTypeName = `${coreModule.api.Utils.i18n('SWFFG.Skills')}: ` ?? ''
                     const listName = `${actionTypeName}${name}`
                     const img = coreModule.api.Utils.getImage(crewActor.img)
@@ -241,6 +241,22 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const actors = tokens?.filter(token => token.actor).map((token) => token.actor)
             if (actors.every((actor) => allowedTypes.includes(actor.type))) {
                 return actors
+            } else {
+                return []
+            }
+        }
+
+        /**
+         * Get tokens
+         * @private
+         * @returns {object}
+         */
+        #getTokens() {
+            const allowedTypes = ['character', 'npc']
+            const tokens = coreModule.api.Utils.getControlledTokens()
+            const actors = tokens?.filter(token => token.actor).map((token) => token.actor)
+            if (actors.every((actor) => allowedTypes.includes(actor.type))) {
+                return tokens
             } else {
                 return []
             }
