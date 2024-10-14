@@ -1,4 +1,12 @@
+# Changelog
+
+`XXX`
+
+* Fixes:
+  * Fixe proficiency dices and ability dices when the actor is a minion
+
 `12.1.0.1_903`
+
 * Features:
   * Add vehicle actor sheet weapons
   * Add vehicle crew skills into skills

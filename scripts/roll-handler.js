@@ -184,10 +184,19 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         async #handleSkillAction(event, actor, actionId, token) {
             const actorSheet = await actor.sheet.getData();
-            //const skill = actor.system.skills[actionId]
-            //const characteristic = actor.system.characteristics[skill.characteristic]
             let pool = new DicePoolFFG({ 'difficulty': 2 });
             pool = get_dice_pool(actor.id, actionId, pool)
+            if (actor.type === "minion") {
+                if (actor.system.skills[actionId].groupskill) {
+
+                    let skillRank = actor.system.skills[actionId].rank;
+                    let characteristicValue = actor.system.characteristics[actor.system.skills[actionId].characteristic].value
+                    let ability = Math.max(characteristicValue, skillRank) - Math.min(characteristicValue, skillRank);
+                    let proficiency = Math.min(characteristicValue, skillRank);
+                    pool.proficiency = proficiency
+                    pool.ability = ability
+                }
+            }
             await game.ffg.DiceHelpers.displayRollDialog(
                 actorSheet,
                 pool,
@@ -205,7 +214,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} crewActorId The crew Actor id
          */
         async #handleSkillVehicleAction(event, actor, actionId, token, crewActorId, use_handling) {
-            
+
             const crewActor = game.actors.get(crewActorId);
             const crewActorSheet = await crewActor.sheet.getData();
             const skill = crewActor.system.skills[actionId]
