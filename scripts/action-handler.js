@@ -203,7 +203,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         use_handling = skillRole[0].use_handling
                     }
 
-                    const name = `${skill} (${values.actor_name})`
+                    const name = values.role
                     const id = [skill, actionId].join('-');
                     const crewActorId = values.actor_id
                     const crewActor = game.actors.get(crewActorId);
@@ -211,6 +211,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const actionTypeName = `${coreModule.api.Utils.i18n('SWFFG.Skills')}: ` ?? ''
                     const listName = `${actionTypeName}${name}`
                     const img = coreModule.api.Utils.getImage(crewActor.img)
+                    const tooltip = values.actor_name
 
 
                     actions.push({
@@ -218,7 +219,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: name,
                         encodedValue: encodedValue,
                         listName: listName,
-                        img: img
+                        img: img,
+                        tooltip: tooltip
                     })
                     // Add actions to HUD
                     this.addActions(actions, groupData)
