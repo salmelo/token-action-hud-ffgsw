@@ -1,7 +1,12 @@
 # Changelog
 
-`XXX`
+`12.1.1.1_903`
 
+* Features:
+  * Create the group `Crew skill`and move crew skill into
+  * Display role name instead of the actor name for crew. Actor name displayed in the tooltip
+  * Add image for combat and skill tabs
+  * showtitle and grid settings by default for combat and skill tabs
 * Fixes:
   * Fixe proficiency dices and ability dices when the actor is a minion
 

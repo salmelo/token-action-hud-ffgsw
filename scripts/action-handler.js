@@ -220,7 +220,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         encodedValue: encodedValue,
                         listName: listName,
                         img: img,
-                        tooltip: tooltip
+                        tooltip: tooltip,
                     })
                     // Add actions to HUD
                     this.addActions(actions, groupData)

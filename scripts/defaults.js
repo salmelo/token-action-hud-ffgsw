@@ -18,6 +18,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 nestId: 'inventory',
                 id: 'inventory',
                 name: game.i18n.localize('SWFFG.Combat'),
+                settings: {
+                    image: "systems/starwarsffg/images/mod-weapon.png",
+                    grid: true,
+                    showTitle: true,
+                },
                 groups: [
                     { ...groups.weapons, nestId: 'inventory_weapon' },
                     { ...groups.combatsw, nestId: 'inventory_combat' }
@@ -30,12 +35,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 nestId: 'skills',
                 id: 'skills',
                 name: game.i18n.localize('SWFFG.Skills'),
+                settings: {
+                    image: "systems/starwarsffg/images/dice/starwars/whiteHex.png",
+                    grid: true,
+                    showTitle: true,
+                },
+
                 groups: [
-                    { ...groups.general, nestId: 'skills_general' },                    
-                    { ...groups.social, nestId: 'skills_social' },                    
+                    { ...groups.general, nestId: 'skills_general' },
+                    { ...groups.social, nestId: 'skills_social' },
                     { ...groups.knowledge, nestId: 'skills_knowledge' },
                     { ...groups.crewskills, nestId: 'skills_Crewskills' },
-                   
+
                 ]
             },
             {
