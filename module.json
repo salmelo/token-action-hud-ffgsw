@@ -7,7 +7,7 @@
       "name": "Balebos"
     }
   ],
-  "version": "12.1.1.1_903",
+  "version": "12.2.0.1_903",
   "compatibility": {
     "minimum": "12",
     "verified": "12"
@@ -33,14 +33,14 @@
   "relationships": {
     "systems": [
       {
-				"id": "starwarsffg",
-				"manifest": "https://raw.githubusercontent.com/StarWarsFoundryVTT/StarWarsFFG/master/system.json",
-				"type": "system",
-				"compatibility": {
-					"minimum": "1.901",
-					"verified": "1.903"
-				}
-			}
+        "id": "starwarsffg",
+        "manifest": "https://raw.githubusercontent.com/StarWarsFoundryVTT/StarWarsFFG/master/system.json",
+        "type": "system",
+        "compatibility": {
+          "minimum": "1.901",
+          "verified": "1.903"
+        }
+      }
     ],
     "requires": [
       {
@@ -48,20 +48,21 @@
         "type": "module",
         "compatibility": [
           {
-            "minimum": "1.5.0",
-            "maximum": "1.5",
-            "verified": "1.5.0"
+            "minimum": "2.0.0",
+            "verified": "2.0.0"
           }
         ]
       }
     ]
   },
-  "media": [{
-		"type": "setup",
-		"url": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
-		"thumbnail": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp"
-	}],
+  "media": [
+    {
+      "type": "setup",
+      "url": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
+      "thumbnail": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp"
+    }
+  ],
   "url": "https://github.com/TeddyBears/token-action-hud-ffgsw",
   "manifest": "https://raw.githubusercontent.com/TeddyBears/token-action-hud-ffgsw/refs/heads/main/module.json",
-  "download": "https://github.com/TeddyBears/token-action-hud-ffgsw/archive/refs/tags/12.1.1.1_903.zip"
+  "download": "https://github.com/TeddyBears/token-action-hud-ffgsw/archive/refs/tags/12.2.0.1_903.zip"
 }

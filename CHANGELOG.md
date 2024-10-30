@@ -1,5 +1,10 @@
 # Changelog
 
+`12.0.0.1_903`
+
+* Features:
+  * Small update to be compatible with the last version of `Token Action HUD Core` 2.0.x
+  
 `12.1.1.1_903`
 
 * Features:
