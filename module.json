@@ -7,16 +7,16 @@
       "name": "Balebos"
     }
   ],
-  "version": "12.2.0.1_903",
+  "version": "12.2.1.1_903",
   "compatibility": {
     "minimum": "12",
     "verified": "12"
   },
   "esmodules": [
-    "./scripts/init.js"
+    "scripts/init.js"
   ],
   "styles": [
-    "./styles/tah-template-style.css"
+    "styles/tah-template-style.css"
   ],
   "languages": [
     {
@@ -46,12 +46,10 @@
       {
         "id": "token-action-hud-core",
         "type": "module",
-        "compatibility": [
-          {
-            "minimum": "2.0.0",
-            "verified": "2.0.0"
-          }
-        ]
+        "compatibility": {
+          "minimum": "2.0.0",
+          "verified": "2.0.8"
+        }
       }
     ]
   },
@@ -59,12 +57,13 @@
     {
       "type": "setup",
       "url": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
-      "thumbnail": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp"
+      "thumbnail": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
+      "loop": false
     }
   ],
   "url": "https://github.com/TeddyBears/token-action-hud-ffgsw",
-  "changelog":"https://github.com/TeddyBears/token-action-hud-ffgsw/blob/main/CHANGELOG.md",
-  "readme":"https://github.com/TeddyBears/token-action-hud-ffgsw/blob/main/README.md",
   "manifest": "https://raw.githubusercontent.com/TeddyBears/token-action-hud-ffgsw/refs/heads/main/module.json",
-  "download": "https://github.com/TeddyBears/token-action-hud-ffgsw/archive/refs/tags/12.2.0.1_903.zip"
+  "changelog": "https://github.com/TeddyBears/token-action-hud-ffgsw/blob/main/CHANGELOG.md",
+  "readme": "https://github.com/TeddyBears/token-action-hud-ffgsw/blob/main/README.md",
+  "download": "https://github.com/TeddyBears/token-action-hud-ffgsw/archive/refs/tags/12.2.1.1_903.zip"
 }

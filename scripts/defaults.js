@@ -24,8 +24,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     showTitle: true,
                 },
                 groups: [
-                    { ...groups.weapons, nestId: 'inventory_weapon' },
-                    { ...groups.combatsw, nestId: 'inventory_combat' }
+                    { ...groups.weapons, nestId: 'inventory_weapon' },                    
+                    { ...groups.Combat, nestId: 'inventory_combat' }
                     // { ...groups.armour, nestId: 'inventory_armour' },
                     // { ...groups.gear, nestId: 'inventory_gear' },
                     // { ...groups.consumables, nestId: 'inventory_consumables' }
@@ -42,9 +42,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 },
 
                 groups: [
-                    { ...groups.general, nestId: 'skills_general' },
-                    { ...groups.social, nestId: 'skills_social' },
-                    { ...groups.knowledge, nestId: 'skills_knowledge' },
+                    { ...groups.General, nestId: 'skills_General' },
+                    { ...groups.Social, nestId: 'skills_social' },
+                    { ...groups.Knowledge, nestId: 'skills_knowledge' },
                     { ...groups.crewskills, nestId: 'skills_Crewskills' },
 
                 ]
@@ -53,6 +53,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 nestId: 'utility',
                 id: 'utility',
                 name: game.i18n.localize('tokenActionHud.utility'),
+                settings: {
+                    //image: "systems/starwarsffg/images/dice/starwars/whiteHex.png",
+                    grid: true,
+                    showTitle: true,
+                },
                 groups: [
                     { ...groups.combat, nestId: 'utility_combat' },
                     { ...groups.token, nestId: 'utility_token' },

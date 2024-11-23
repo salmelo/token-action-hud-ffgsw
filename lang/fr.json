@@ -17,5 +17,7 @@
         }
       }
     }
-  }
+  },
+  "SWFFG.Crew.Roles.Weapon.Title": "Sélectionner le membre d'équipage",
+  "SWFFG.Crew.Roles.Weapon.Description" : "Choisissez l'artilleur à utiliser"
 }

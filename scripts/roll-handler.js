@@ -1,5 +1,6 @@
 export let RollHandler = null
 import { get_dice_pool } from "../../../systems/starwarsffg/modules/helpers/dice-helpers.js";
+import { skills as skillsList } from "../../../systems/starwarsffg/modules/config/ffg-skills.js";
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     /**
@@ -14,28 +15,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} encodedValue The encoded value
          */
         async handleActionClick(event, encodedValue) {
-            const [actionTypeId, actionId, crewActorId, use_handling] = encodedValue.split('|')
+            const { actionType, actionId } = this.action.system;
 
-            const renderable = ['item', 'weapons']
-
-            if (renderable.includes(actionTypeId) && this.isRenderItem()) {
-                return this.doRenderItem(this.actor, actionId)
-            }
-
-            const knownCharacters = ['character', 'rival']
-            // If single actor is selected
-            if (this.actor) {
-                await this.#handleAction(event, this.actor, this.token, actionTypeId, actionId, crewActorId, use_handling)
-                return
-            }
-
-            const controlledTokens = canvas.tokens.controlled
-                .filter((token) => knownCharacters.includes(token.actor?.type))
-
-            // If multiple actors are selected
-            for (const token of controlledTokens) {
-                const actor = token.actor
-                await this.#handleAction(event, actor, token, actionTypeId, actionId, crewActorId, use_handling)
+            if (!this.actor) {
+                for (const token of coreModule.api.Utils.getControlledTokens()) {
+                    const actor = token.actor;
+                    await this.handleAction(event, actionType, actor, token, actionId);
+                }
+            } else {
+                await this.handleAction(event, actionType, this.actor, this.token, actionId);
             }
         }
 
@@ -60,137 +48,199 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         /**
          * Handle action
          * @private
-         * @param {object} event        The event
-         * @param {object} actor        The actor
-         * @param {object} token        The token
-         * @param {string} actionTypeId The action type id
-         * @param {string} actionId     The actionId
-         * @param {string} crewActorId     The crewActorId
+         * @param {object} event
+         * @param {string} actionType
+         * @param {object} actor
+         * @param {object} token
+         * @param {string} actionId
          */
-        async #handleAction(event, actor, token, actionTypeId, actionId, crewActorId, use_handling) {
-            switch (actionTypeId) {
-                case 'item':
-                    if (actor.type !== "vehicle") {
-                        this.#handleItemAction(event, actor, actionId)
-                    } else {
-                        this.#handleItemVehicleAction(event, actor, actionId)
-                    }
-                    break
-                case 'utility':
-                    this.#handleUtilityAction(token, actionId)
-                    break
-                case 'skill':
-                    if (actor.type !== "vehicle") {
-                        this.#handleSkillAction(event, actor, actionId, token)
-                    } else {
-                        this.#handleSkillVehicleAction(event, actor, actionId, token, crewActorId, use_handling)
-                    }
-                    break
+        async handleAction(event, actionType, actor, token, actionId) {
+            switch (actionType) {
+                case "crewSkill":
+                    this.crewAction(event, actor, actionId); break;
+                case "weapon":
+                    this.weaponAction(event, actor, actionId);
+                    break;
+                case "shipweapon":
+                    this.vehicleWeaponAction(event, actor, actionId); break;
+                case "skill":
+                    this.rollSkill(event, actor, actionId); break;
+                    break;
+                case "utility":
+                    await this.performUtilityAction(event, actor, token, actionId); break;
+                default:
+                    break;
             }
         }
 
         /**
-         * Handle item action
+         * Use Weapon
          * @private
          * @param {object} event    The event
          * @param {object} actor    The actor
          * @param {string} actionId The action id
          */
-        async #handleItemAction(event, actor, actionId) {
-            const item = actor.items.get(actionId)
-            await game.ffg.DiceHelpers.rollItem(item.id, actor.id);
+        async weaponAction(event, actor, actionId) {
+            const weapon = coreModule.api.Utils.getItem(actor, actionId);
+            game.ffg.DiceHelpers.rollItem(weapon.id, actor.id);
         }
-
 
         /**
          * Handle item vehicle action
          * @private
          * @param {object} event    The event
-         * @param {object} actor    The actor
+         * @param {object} actor    The actor (the vehicle)
          * @param {string} actionId The action id
          */
-        async #handleItemVehicleAction(event, actor, actionId) {
-            event.preventDefault();
-            event.stopPropagation();
-            const ship = actor;
-            //const weaponId = $(event.currentTarget).data("item-id");
-            const weapon = ship.items.get(actionId);
+        async vehicleWeaponAction(event, vehicle, actionId) {
+            const weapon = vehicle.items.get(actionId);
+
             // validate the weapon still exists
             if (!weapon) {
                 ui.notifications.warn(game.i18n.localize("SWFFG.Crew.Weapon.Removed"));
                 return;
             }
-            const weaponSkill = weapon.system.skill.value;
-            const crew = await ship.getFlag("starwarsffg", "crew");
-            const skillRoles = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_skill === weaponSkill);
+
+            const crew = await vehicle.getFlag("starwarsffg", "crew");
+
             // validate the vehicle has a crew and there is a role that matches the weapon skill
             if (!crew || crew.length === 0) {
-                CONFIG.logger.warn("Could not find crew for vehicle or could not find relevant skill; presenting default roller");
+                CONFIG.logger.warn("Could not find crew for vehicle");
                 return await game.ffg.DiceHelpers.rollSkill(this, event, null);
             }
+
+            const skillRoles = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_skill === weapon.system.skill.value);
             const crewGunners = crew.filter(member => skillRoles.some(role => role.role_name === member.role));
             if (crewGunners.length === 0) {
-                CONFIG.logger.warn("Could not find crew for this skill type; presenting default roller");
+                CONFIG.logger.warn("Could not find crew for this skill");
                 return await game.ffg.DiceHelpers.rollSkill(this, event, null);
+
             } else if (crewGunners.length > 1) {
                 // create a dialog to ask the user which crew member should use the weapon
-                // build the dialog to select which gunner to use
-                const crewMembers = {};
+                const crewMembers = []
+
                 for (let i = 0; i < crewGunners.length; i++) {
                     const actor = game.actors.get(crewGunners[i].actor_id);
                     const img = actor?.img ? actor.img : "icons/svg/mystery-man.svg";
-                    crewMembers['crew ' + i] = {
-                        icon: `<img src="${img}" style="max-width: 24px; max-height: 24px">`,
-                        label: crewGunners[i].actor_name,
-                        callback: async (html) => {
-                            await this.vehicleCrewGunneryRoll(weapon, weaponSkill, crewGunners[i]);
+
+                    crewMembers[i] =
+                    {
+                        label: `<img src="${img}" style="max-height: 30px;margin-right:10px;vertical-align:middle;">` + crewGunners[i].actor_name,
+                        action: crewGunners[i].actor_id,
+                        callback: async () => {
+                            await this.rollVehicleGunnery(event, crewGunners[i].actor_id, crewGunners[i].actor_role, actionId);
                         }
                     }
                 }
-                // actually show the dialog
-                await new Dialog(
-                    {
-                        title: game.i18n.localize("SWFFG.Crew.Roles.Weapon.Title"),
-                        content: `<p>${game.i18n.localize("SWFFG.Crew.Roles.Weapon.Description")}</p>`,
-                        buttons: crewMembers,
+                const dialog = await foundry.applications.api.DialogV2.wait({
+                    window: {
+                        title: game.i18n.localize("SWFFG.Crew.Roles.Weapon.Description"),
+                        icon: "fa-solid fa-space-station-moon"
                     },
-                ).render(true);
+                    content: "",
+                    modal: true,
+                    rejectClose: false,
+                    buttons: crewMembers
+                });
+
             } else {
-                await this.vehicleCrewGunneryRoll(weapon, weaponSkill, crewGunners[0]);
+                await this.rollVehicleGunnery(event, crewGunners[0].actor_id, crewGunners[0].actor_role, actionId);
             }
         }
 
         /**
-         * Handle utility action
-         * @private
-         * @param {object} token    The token
-         * @param {string} actionId The action id
-         */
-        async #handleUtilityAction(token, actionId) {
-            switch (actionId) {
-                case 'endTurn':
-                    if (game.combat?.current?.tokenId === token.id) {
-                        await game.combat?.nextTurn()
+        * Handle crew action
+        * @private
+        * @param {object} event    The event
+        * @param {object} actor    The actor
+        * @param {string} actionId The action id
+        */
+        async crewAction(event, actor, actionId) {
+            const [crewId, crewRole] = actionId.split(this.delimiter);
+            const crewActor = game.actors.get(crewId);
+            const role = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_name === crewRole);
+
+            if (crewRole === "Pilot" || role[0]?.use_handling == true) {
+                this.rollVehiclePilot(event, actor, crewId, crewRole, role)
+
+            } else if (role[0].use_weapons == true) {
+                const items = Array.from(coreModule.api.Utils.sortItemsByName(this.actor.items).values())
+                //const itemsA = Array.from(items.values())
+                const weapons = items.filter((weapon => weapon.type === "shipweapon"))
+
+                if (weapons.length === 0) {
+                    CONFIG.logger.warn("Could not find weapon for this vehicle");
+                    return
+
+                } else if (weapons.length > 1) {
+                    // create a dialog to ask the user which weapon should be used
+                    const vehicleWeapon = []
+
+                    for (let i = 0; i < weapons.length; i++) {
+                        const img = weapons[i]?.img ? weapons[i]?.img : "icons/svg/mystery-man.svg";
+                        vehicleWeapon[i] =
+                        {
+                            label: `<img src="${img}" style="max-height: 30px;margin-right:10px;vertical-align:middle;">` + weapons[i].name,
+                            action: weapons[i].id,
+                            callback: async () => {
+                                await this.rollVehicleGunnery(event, crewId, crewRole, weapons[i].id);
+                            }
+                        }
                     }
-                    break
-            }
-        }
-        /**
-         * Handle item action
-         * @private
-         * @param {object} event    The event
-         * @param {object} actor    The actor
-         * @param {string} actionId The action id
-         */
-        async #handleSkillAction(event, actor, actionId, token) {
-            const actorSheet = await actor.sheet.getData();
-            let pool = new DicePoolFFG({ 'difficulty': 2 });
-            pool = get_dice_pool(actor.id, actionId, pool)
-            if (actor.type === "minion") {
-                if (actor.system.skills[actionId].groupskill) {
+                    const dialog = await foundry.applications.api.DialogV2.wait({
+                        window: {
+                            title: game.i18n.localize("SWFFG.Crew.Roles.Weapon.Description"),
+                            icon: "fa-solid fa-space-station-moon"
+                        },
+                        content: "",
+                        modal: true,
+                        rejectClose: false,
+                        buttons: vehicleWeapon
+                    });
 
-                    let skillRank = actor.system.skills[actionId].rank;
-                    let characteristicValue = actor.system.characteristics[actor.system.skills[actionId].characteristic].value
+                } else {
+                    await this.rollVehicleGunnery(event, crewId, crewRole, weapons[0].id);
+                }
+            } else {
+                // create chat card data for the vehicle
+                const cardData = {
+                    "crew": {
+                        "name": actor.name,
+                        "img": actor.img,
+                        "crew_card": true,
+                        "role": crewRole,
+                    }
+                };
+                this.rollSkill(event, crewActor, role[0].role_skill, cardData)
+            }
+
+
+
+        }
+
+        /**
+         * Handle skill action
+         * @private
+         * @param {object} event        The event
+         * @param {object} actor        The actor
+         * @param {string} skillId      The skill id
+         * @param {object} cardData     The card data
+         * @param {object} startingPool The startingPool
+         */
+        async rollSkill(event, actor, skillId, cardData = null, startingPool = { 'difficulty': 2 }) {
+            const actorSheet = await actor.sheet.getData();
+            let pool = new DicePoolFFG(startingPool);
+            const skillName = skillsList[skillId].label
+
+
+
+            pool = get_dice_pool(actor.id, skillId, pool)
+
+            if (actor.type === "minion") {
+                if (actor.system.skills[skillId].groupskill) {
+
+                    let skillRank = actor.system.skills[skillId].rank;
+                    let characteristicValue = actor.system.characteristics[actor.system.skills[skillId].characteristic].value
                     let ability = Math.max(characteristicValue, skillRank) - Math.min(characteristicValue, skillRank);
                     let proficiency = Math.min(characteristicValue, skillRank);
                     pool.proficiency = proficiency
@@ -200,88 +250,82 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             await game.ffg.DiceHelpers.displayRollDialog(
                 actorSheet,
                 pool,
-                `${game.i18n.localize("SWFFG.Rolling")} ${actionId}`,
-                actionId
+                `${game.i18n.localize("SWFFG.Rolling")} ${game.i18n.localize(skillName)}`,
+                game.i18n.localize(skillName),
+                cardData
             );
         }
 
         /**
-         * Handle item action
          * @private
          * @param {object} event    The event
-         * @param {object} actor    The actor
+         * @param {object} actor    The actor (the gunner)
          * @param {string} actionId The action id
-         * @param {string} crewActorId The crew Actor id
          */
-        async #handleSkillVehicleAction(event, actor, actionId, token, crewActorId, use_handling) {
-
-            const crewActor = game.actors.get(crewActorId);
-            const crewActorSheet = await crewActor.sheet.getData();
-            const skill = crewActor.system.skills[actionId]
+        async rollVehicleGunnery(event, crewId, crewRole, weaponId) {
+            const weapon = coreModule.api.Utils.getItem(this.actor, weaponId);
             // create chat card data
-            const card_data = {
+            const cardData = {
                 "crew": {
-                    "name": actor.name,
-                    "img": actor.img,
+                    "name": this.actor.name,
+                    "img": this.actor.img,
                     "crew_card": true,
-                    "role": actionId,
-                }
-            };
-            const starting_pool = { 'difficulty': 2 };
-            if (use_handling == "true") {
-                const handling = actor?.system?.stats?.handling?.value;
-                // add modifiers from the vehicle handling
-                if (handling > 0) {
-                    starting_pool['boost'] = handling;
-                } else if (handling < 0) {
-                    starting_pool['setback'] = Math.abs(handling);
+                    "role": crewRole,
                 }
             }
-            let pool = new DicePoolFFG(starting_pool);
-            pool = get_dice_pool(crewActor.id, actionId, pool)
-            await game.ffg.DiceHelpers.displayRollDialog(
-                crewActorSheet,
-                pool,
-                `${game.i18n.localize("SWFFG.Rolling")} ${actionId}`,
-                actionId,
-                card_data
-            );
+            this.rollSkill(event, game.actors.get(crewId), weapon.system.skill.value, foundry.utils.mergeObject(weapon, cardData))
         }
 
         /**
-         * Display the roll dialog for a crew member rolling a ship weapon
-         * @param weapon - weapon item
-         * @param weaponSkill - skill used by the weapon
-         * @param selectedGunner - the crew member rolling the weapon (from the crew, not the actual actor)
-         * @returns {Promise<void>}
+         * @private
+         * @param {object} event    The event
+         * @param {object} vehicle  The vehicle
+         * @param {string} crewId   The pilot id
+         * @param {object} crewRole The crew role name
+         * @param {object} roleData     The role data
          */
-        async vehicleCrewGunneryRoll(weapon, weaponSkill, selectedGunner) {
-            const starting_pool = { 'difficulty': 2 };
-            const ship = this.actor;
-            const crewSheet = game.actors.get(selectedGunner.actor_id)?.sheet;
-            // create chat card data
-            const card_data = {
+        async rollVehiclePilot(event, vehicle, crewId, crewRole, roleData) {
+
+            var handling = vehicle?.system?.stats?.handling?.value;
+            var currentSpeed = vehicle?.system?.stats?.speed?.value;
+            var silhouette = vehicle?.system?.stats?.silhouette?.value;
+            var skill = ""
+            const startingPool = { "difficulty": 2 }
+
+            // add modifiers from the vehicle handling
+            if (handling > 0) {
+                startingPool['boost'] = handling;
+            } else if (handling < 0) {
+                startingPool['setback'] = Math.abs(handling);
+            }
+
+            // Set difficulty from current speed and silhouette
+            if (currentSpeed > 0) {
+                startingPool['challenge'] = Math.min(silhouette / 2, currentSpeed)
+                startingPool['difficulty'] = Math.max(silhouette / 2, currentSpeed) - startingPool['challenge']
+            }
+
+            // Set skill
+            if (roleData?.roll_skill) {
+                skill = roleData?.roll_skill;
+            } else if (vehicle?.system?.spaceShip) {
+                skill = "Piloting: Space";
+            } else {
+                skill = "Piloting: Planetary";
+            }
+
+            const cardData = {
                 "crew": {
-                    "name": ship.name,
-                    "img": ship.img,
+                    "name": this.actor.name,
+                    "img": this.actor.img,
                     "crew_card": true,
-                    "role": selectedGunner.role,
+                    "role": crewRole,
                 }
             }
-            // create the starting pool
-            let pool = new DicePoolFFG(starting_pool);
-            // update the pool with actor data
-            pool = get_dice_pool(selectedGunner.actor_id, weaponSkill, pool);
-            pool = await game.ffg.DiceHelpers.getModifiers(pool, weapon);
-            // display the roll dialog
-            await game.ffg.DiceHelpers.displayRollDialog(
-                crewSheet,
-                pool,
-                `${game.i18n.localize("SWFFG.Rolling")} ${weaponSkill}`,
-                weaponSkill,
-                foundry.utils.mergeObject(weapon, card_data)
-            );
+            this.rollSkill(event, game.actors.get(crewId), skill, cardData, startingPool)
         }
+
+
 
 
     }

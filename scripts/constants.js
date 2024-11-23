@@ -22,7 +22,8 @@ export const REQUIRED_CORE_MODULE_VERSION = '2.0'
  */
 export const ACTION_TYPE = {
     item: 'tokenActionHud.template.item',
-    utility: 'tokenActionHud.utility'
+    utility: 'tokenActionHud.utility',
+    skill: "SWFFG.Skills",
 }
 
 /**
@@ -37,10 +38,10 @@ export const GROUP = {
     token: { id: 'token', name: 'tokenActionHud.token', type: 'system' },
     utility: { id: 'utility', name: 'tokenActionHud.utility', type: 'system' },
     crewskills: { id: 'crewskills', name: 'SWFFG.Crew.Title', type: 'system' },
-    general: { id: 'General', name:"SWFFG.SkillsGeneral", type: 'system' },
-    social: { id: 'Social', name:"SWFFG.SkillsSocial", type: 'system' },
-    knowledge: { id: 'Knowledge', name:"SWFFG.SkillsKnowledge", type: 'system' },
-    combatsw: { id: 'Combat', name:"SWFFG.SkillsCombat", type: 'system' },
+    General: { id: 'General', name:"SWFFG.SkillsGeneral", type: 'system' },
+    Social: { id: 'Social', name:"SWFFG.SkillsSocial", type: 'system' },
+    Knowledge: { id: 'Knowledge', name:"SWFFG.SkillsKnowledge", type: 'system' },
+    Combat: { id: 'Combat', name:"SWFFG.SkillsCombat", type: 'system' },
 }
 
 /**
