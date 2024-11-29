@@ -16,8 +16,20 @@
           "name": "Afficher non-équipé"
         }
       }
+    },
+    "macros": {
+      "strainRecovery": {
+        "name": "Récupération du stress",
+        "select": "Vous devez sélectionner un token et un seul",
+        "noStrain.heal": "n'a pas de stress à soigner",
+        "selectSkill.label": "Sélectionner la compétence de récupération",
+        "healed": "A guérit {quantity} de stress",
+        "dialog.title": "Récupération de stress après combat",
+        "recover": "Soigner",
+        "balance": "sérénité"
+      }
     }
   },
   "SWFFG.Crew.Roles.Weapon.Title": "Sélectionner le membre d'équipage",
-  "SWFFG.Crew.Roles.Weapon.Description" : "Choisissez l'artilleur à utiliser"
+  "SWFFG.Crew.Roles.Weapon.Description": "Choisissez l'artilleur à utiliser"
 }

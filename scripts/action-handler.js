@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTION_TYPE, GROUP } from './constants.js'
+import { ACTION_TYPE, GROUP, MACRO } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -53,6 +53,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this.#buildInventory(),
             ])
             this.#buildSkills()
+            this.buidlMacros()
         }
 
         /**
@@ -204,6 +205,33 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     return null
                 }
 
+            }
+        }
+
+        async buidlMacros() {
+
+            for (const [id, macroData] of Object.entries(MACRO)) {
+                try {
+                    const actionType = "macro"
+                    const groupData = {
+                        id: macroData.groupId,
+                        name: game.i18n.localize(GROUP[macroData.groupId].name),
+                        type: 'system'
+                    }
+                    const actionData = new Array()
+                    actionData.push({
+                        id: id,
+                        name: game.i18n.localize(MACRO[id].name),
+                        img: MACRO[id].icon,
+                        listName: this.#getListName("macro", MACRO[id].name),
+                        system: { actionType, actionId: id }
+                    })
+
+                    this.addActions(actionData, groupData);
+                } catch (error) {
+                    coreModule.api.Logger.error(actionId)
+                    return null
+                }
             }
         }
 

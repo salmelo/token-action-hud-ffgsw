@@ -1,6 +1,7 @@
 export let RollHandler = null
 import { get_dice_pool } from "../../../systems/starwarsffg/modules/helpers/dice-helpers.js";
 import { skills as skillsList } from "../../../systems/starwarsffg/modules/config/ffg-skills.js";
+import { MODULE } from './constants.js'
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     /**
@@ -14,7 +15,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} event        The event
          * @param {string} encodedValue The encoded value
          */
-        async handleActionClick(event, encodedValue) {
+        async handleActionClick(event) {
             const { actionType, actionId } = this.action.system;
 
             if (!this.actor) {
@@ -55,6 +56,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} actionId
          */
         async handleAction(event, actionType, actor, token, actionId) {
+            console.log(event, actionType, actor, token, actionId)
             switch (actionType) {
                 case "crewSkill":
                     this.crewAction(event, actor, actionId); break;
@@ -68,6 +70,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     break;
                 case "utility":
                     await this.performUtilityAction(event, actor, token, actionId); break;
+                case "macro":
+                    await this.macroAction(event, actor, token, actionId); break;
                 default:
                     break;
             }
@@ -232,8 +236,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             let pool = new DicePoolFFG(startingPool);
             const skillName = skillsList[skillId].label
 
-
-
             pool = get_dice_pool(actor.id, skillId, pool)
 
             if (actor.type === "minion") {
@@ -323,6 +325,29 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
             }
             this.rollSkill(event, game.actors.get(crewId), skill, cardData, startingPool)
+        }
+
+        async macroAction(event, actor, token, actionId) {
+            try {
+                const command = await fetch("modules/" + MODULE.ID + "/content/macros/" + actionId + ".js")
+                if (!command.ok) {
+                    coreModule.api.Logger.error("No file found for the macro '" + actionId + "'")
+                    return null
+                }
+                const MacroData = {
+                    //_id: "";
+                    name: game.i18n.localize(actionId),
+                    type: "script",
+                    author: "",
+                    scope: "global",
+                    command: await command.text(),
+                }
+                const macro = new Macro(MacroData).execute()
+            } catch (error) {
+                coreModule.api.Logger.error(actionId, error.message)
+                coreModule.api.Logger.error(error)
+                return null
+            }
         }
 
 

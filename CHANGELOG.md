@@ -4,9 +4,10 @@
 
 * Features:
   * Add tooltip for weapons (Range, damage and critical values)
-  * Use the new dialog system (light or dark theme)
+  * Use the new dialog system (light/dark theme)
   * For crew skills using the Pilot role or handling, difficulty and challenge dice are automatically placed if the current speed is greater than 0
   * If the vehicle has more than 1 weapon open a dialog to choose the weapon after use a crew action with a use weapon role
+  * Add an action to recover stress after combat into utility tab
 * Fixes:
   * Refactoring code and remove deprecated functions for TAH version 2.x
   * Skill name is translated for the Dice pool dialog and the chat message

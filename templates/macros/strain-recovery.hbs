@@ -1,0 +1,21 @@
+<form class="form">
+    {{localize "tokenActionHud.macros.strainRecovery.selectSkill.label"}}
+    <div class="grid grid-2col">
+        <div class="form-group">
+            <label for="Cool">
+                <input type="radio" id="Cool" name="selected_skill" value="Cool" {{cool_checked}} />
+                {{cool_skill.label}}
+                {{{cool_pool}}}
+            </label>
+
+        </div>
+        <div class="form-group">
+            <label for="Discipline">
+                <input type="radio" id="Discipline" name="selected_skill" value="Discipline" {{discipline_checked}} />
+                {{discipline_skill.label}}
+                {{{discipline_pool}}}
+            </label>
+
+        </div>
+    </div>
+</form>

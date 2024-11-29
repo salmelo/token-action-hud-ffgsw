@@ -24,6 +24,7 @@ export const ACTION_TYPE = {
     item: 'tokenActionHud.template.item',
     utility: 'tokenActionHud.utility',
     skill: "SWFFG.Skills",
+    macro: "macro",
 }
 
 /**
@@ -38,10 +39,10 @@ export const GROUP = {
     token: { id: 'token', name: 'tokenActionHud.token', type: 'system' },
     utility: { id: 'utility', name: 'tokenActionHud.utility', type: 'system' },
     crewskills: { id: 'crewskills', name: 'SWFFG.Crew.Title', type: 'system' },
-    General: { id: 'General', name:"SWFFG.SkillsGeneral", type: 'system' },
-    Social: { id: 'Social', name:"SWFFG.SkillsSocial", type: 'system' },
-    Knowledge: { id: 'Knowledge', name:"SWFFG.SkillsKnowledge", type: 'system' },
-    Combat: { id: 'Combat', name:"SWFFG.SkillsCombat", type: 'system' },
+    General: { id: 'General', name: "SWFFG.SkillsGeneral", type: 'system' },
+    Social: { id: 'Social', name: "SWFFG.SkillsSocial", type: 'system' },
+    Knowledge: { id: 'Knowledge', name: "SWFFG.SkillsKnowledge", type: 'system' },
+    Combat: { id: 'Combat', name: "SWFFG.SkillsCombat", type: 'system' },
 }
 
 /**
@@ -56,11 +57,8 @@ export const ITEM_TYPE = {
 }
 
 /**
- * Item types
- */
-export const SKILL_TYPE = {
-    // knowledges: { groupId: 'Knowledges' },
-    // main: { groupId: 'Main' },
-    // combat: { groupId: 'Combat' },
-    // social: { groupId: 'Social' }
-  }
+* Item types
+*/
+export const MACRO = {
+    strainRecovery: { id: 'stressRecovery', name: "tokenActionHud.macros.strainRecovery.name", type: 'script', groupId: "utility", icon: "icons/svg/regen.svg" },    
+}
