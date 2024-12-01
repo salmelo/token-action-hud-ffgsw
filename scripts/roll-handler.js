@@ -55,8 +55,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} token
          * @param {string} actionId
          */
-        async handleAction(event, actionType, actor, token, actionId) {
-            console.log(event, actionType, actor, token, actionId)
+        async handleAction(event, actionType, actor, token, actionId) {            
             switch (actionType) {
                 case "crewSkill":
                     this.crewAction(event, actor, actionId); break;
@@ -107,48 +106,54 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const crew = await vehicle.getFlag("starwarsffg", "crew");
 
-            // validate the vehicle has a crew and there is a role that matches the weapon skill
-            if (!crew || crew.length === 0) {
-                CONFIG.logger.warn("Could not find crew for vehicle");
-                return await game.ffg.DiceHelpers.rollSkill(this, event, null);
-            }
+            try {
+                // validate the vehicle has a crew and there is a role that matches the weapon skill
+                if (!crew || crew.length === 0) {
+                    ui.notifications.warn(game.i18n.localize("tokenActionHud.error.CrewMiss"));
+                    return null
+                }
 
-            const skillRoles = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_skill === weapon.system.skill.value);
-            const crewGunners = crew.filter(member => skillRoles.some(role => role.role_name === member.role));
-            if (crewGunners.length === 0) {
-                CONFIG.logger.warn("Could not find crew for this skill");
-                return await game.ffg.DiceHelpers.rollSkill(this, event, null);
+                const skillRoles = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_skill === weapon.system.skill.value);
+                const crewGunners = crew.filter(member => skillRoles.some(role => role.role_name === member.role));
+                if (crewGunners.length === 0) {
+                    ui.notifications.warn(game.i18n.format("tokenActionHud.error.crewWeaponSkillMiss", {skilllabel:game.i18n.localize("SWFFG.SkillsName"+weapon.system.skill.value)}));
+                    return null
 
-            } else if (crewGunners.length > 1) {
-                // create a dialog to ask the user which crew member should use the weapon
-                const crewMembers = []
+                } else if (crewGunners.length > 1) {
+                    // create a dialog to ask the user which crew member should use the weapon
+                    const crewMembers = []
 
-                for (let i = 0; i < crewGunners.length; i++) {
-                    const actor = game.actors.get(crewGunners[i].actor_id);
-                    const img = actor?.img ? actor.img : "icons/svg/mystery-man.svg";
+                    for (let i = 0; i < crewGunners.length; i++) {
+                        const actor = game.actors.get(crewGunners[i].actor_id);
+                        const img = actor?.img ? actor.img : "icons/svg/mystery-man.svg";
 
-                    crewMembers[i] =
-                    {
-                        label: `<img src="${img}" style="max-height: 30px;margin-right:10px;vertical-align:middle;">` + crewGunners[i].actor_name,
-                        action: crewGunners[i].actor_id,
-                        callback: async () => {
-                            await this.rollVehicleGunnery(event, crewGunners[i].actor_id, crewGunners[i].actor_role, actionId);
+                        crewMembers[i] =
+                        {
+                            label: `<img src="${img}" style="max-height: 30px;margin-right:10px;vertical-align:middle;">` + crewGunners[i].actor_name,
+                            action: crewGunners[i].actor_id,
+                            callback: async () => {
+                                await this.rollVehicleGunnery(event, crewGunners[i].actor_id, crewGunners[i].actor_role, actionId);
+                            }
                         }
                     }
-                }
-                const dialog = await foundry.applications.api.DialogV2.wait({
-                    window: {
-                        title: game.i18n.localize("SWFFG.Crew.Roles.Weapon.Description"),
-                        icon: "fa-solid fa-space-station-moon"
-                    },
-                    content: "",
-                    modal: true,
-                    rejectClose: false,
-                    buttons: crewMembers
-                });
+                    const dialog = await foundry.applications.api.DialogV2.wait({
+                        window: {
+                            title: game.i18n.localize("SWFFG.Crew.Roles.Weapon.Description"),
+                            icon: "fa-solid fa-space-station-moon"
+                        },
+                        content: "",
+                        modal: true,
+                        rejectClose: false,
+                        buttons: crewMembers
+                    });
 
-            } else {
-                await this.rollVehicleGunnery(event, crewGunners[0].actor_id, crewGunners[0].actor_role, actionId);
+                } else {
+                    await this.rollVehicleGunnery(event, crewGunners[0].actor_id, crewGunners[0].actor_role, actionId);
+                }
+            } catch (error) {
+                coreModule.api.Logger.error(actionId, error.message)
+                coreModule.api.Logger.error(error)
+                return null
             }
         }
 
@@ -164,62 +169,64 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const crewActor = game.actors.get(crewId);
             const role = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_name === crewRole);
 
-            if (crewRole === "Pilot" || role[0]?.use_handling == true) {
-                this.rollVehiclePilot(event, actor, crewId, crewRole, role)
+            try {
+                if (crewRole === "Pilot" || role[0]?.use_handling == true) {
+                    this.rollVehiclePilot(event, actor, crewId, crewRole, role)
 
-            } else if (role[0].use_weapons == true) {
-                const items = Array.from(coreModule.api.Utils.sortItemsByName(this.actor.items).values())
-                //const itemsA = Array.from(items.values())
-                const weapons = items.filter((weapon => weapon.type === "shipweapon"))
+                } else if (role[0].use_weapons == true) {
+                    const items = Array.from(coreModule.api.Utils.sortItemsByName(this.actor.items).values())
+                    const weapons = items.filter((weapon => weapon.type === "shipweapon"))
 
-                if (weapons.length === 0) {
-                    CONFIG.logger.warn("Could not find weapon for this vehicle");
-                    return
+                    if (weapons.length === 0) {
+                        ui.notifications.warn(game.i18n.localize("tokenActionHud.error.weaponMiss"));
+                        return
 
-                } else if (weapons.length > 1) {
-                    // create a dialog to ask the user which weapon should be used
-                    const vehicleWeapon = []
+                    } else if (weapons.length > 1) {
+                        // create a dialog to ask the user which weapon should be used
+                        const vehicleWeapon = []
 
-                    for (let i = 0; i < weapons.length; i++) {
-                        const img = weapons[i]?.img ? weapons[i]?.img : "icons/svg/mystery-man.svg";
-                        vehicleWeapon[i] =
-                        {
-                            label: `<img src="${img}" style="max-height: 30px;margin-right:10px;vertical-align:middle;">` + weapons[i].name,
-                            action: weapons[i].id,
-                            callback: async () => {
-                                await this.rollVehicleGunnery(event, crewId, crewRole, weapons[i].id);
+                        for (let i = 0; i < weapons.length; i++) {
+                            const img = weapons[i]?.img ? weapons[i]?.img : "icons/svg/mystery-man.svg";
+                            vehicleWeapon[i] =
+                            {
+                                label: `<img src="${img}" style="max-height: 30px;margin-right:10px;vertical-align:middle;">` + weapons[i].name,
+                                action: weapons[i].id,
+                                callback: async () => {
+                                    await this.rollVehicleGunnery(event, crewId, crewRole, weapons[i].id);
+                                }
                             }
                         }
-                    }
-                    const dialog = await foundry.applications.api.DialogV2.wait({
-                        window: {
-                            title: game.i18n.localize("SWFFG.Crew.Roles.Weapon.Description"),
-                            icon: "fa-solid fa-space-station-moon"
-                        },
-                        content: "",
-                        modal: true,
-                        rejectClose: false,
-                        buttons: vehicleWeapon
-                    });
+                        const dialog = await foundry.applications.api.DialogV2.wait({
+                            window: {
+                                title: game.i18n.localize("SWFFG.Crew.Roles.Weapon.Description"),
+                                icon: "fa-solid fa-space-station-moon"
+                            },
+                            content: "",
+                            modal: true,
+                            rejectClose: false,
+                            buttons: vehicleWeapon
+                        });
 
+                    } else {
+                        await this.rollVehicleGunnery(event, crewId, crewRole, weapons[0].id);
+                    }
                 } else {
-                    await this.rollVehicleGunnery(event, crewId, crewRole, weapons[0].id);
+                    // create chat card data for the vehicle
+                    const cardData = {
+                        "crew": {
+                            "name": actor.name,
+                            "img": actor.img,
+                            "crew_card": true,
+                            "role": crewRole,
+                        }
+                    };
+                    this.rollSkill(event, crewActor, role[0].role_skill, cardData)
                 }
-            } else {
-                // create chat card data for the vehicle
-                const cardData = {
-                    "crew": {
-                        "name": actor.name,
-                        "img": actor.img,
-                        "crew_card": true,
-                        "role": crewRole,
-                    }
-                };
-                this.rollSkill(event, crewActor, role[0].role_skill, cardData)
+            } catch (error) {
+                coreModule.api.Logger.error(actionId, error.message)
+                coreModule.api.Logger.error(error)
+                return null
             }
-
-
-
         }
 
         /**
@@ -332,6 +339,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const command = await fetch("modules/" + MODULE.ID + "/content/macros/" + actionId + ".js")
                 if (!command.ok) {
                     coreModule.api.Logger.error("No file found for the macro '" + actionId + "'")
+                    ui.notifications.warn(game.i18n.localize("tokenActionHud.error.macroCommandMiss"));
                     return null
                 }
                 const MacroData = {

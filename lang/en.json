@@ -28,6 +28,12 @@
         "recover": "Recover",
         "balance": "balance"
       }
+    },
+    "error": {
+      "crewWeaponSkillMiss": "Could not find crew role for this skill: {skilllabel}",
+      "CrewMiss": "Could not find crew for this vehicle",
+      "weaponMiss": "Could not find weapon for this vehicle",
+      "macroCommandMiss": "Could not find command for the macro"
     }
   }
 }

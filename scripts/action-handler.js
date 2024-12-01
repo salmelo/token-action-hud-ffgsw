@@ -169,7 +169,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #buildCrewSkills() {
             const crew = await this.actor.getFlag("starwarsffg", "crew");
             if (!crew || crew.length === 0) {
-                CONFIG.logger.warn("Could not find crew for vehicle or could not find relevant skill; presenting default roller");
+                CONFIG.logger.warn("Could not find crew for this vehicle");
                 return;
             }
             const actionType = 'crewSkill'

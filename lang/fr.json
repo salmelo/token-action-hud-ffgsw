@@ -28,6 +28,12 @@
         "recover": "Soigner",
         "balance": "sérénité"
       }
+    },
+    "error": {
+      "crewWeaponSkillMiss": "Aucun rôle d'équipage pour cette compétence: {skilllabel}",
+      "CrewMiss": "Aucun équipage trouvé pour ce véhicule",
+      "weaponMiss": "Aucune arme trouvée pour ce véhicule",
+      "macroCommandMiss": "Aucune commande trouvée pour cette macro"
     }
   },
   "SWFFG.Crew.Roles.Weapon.Title": "Sélectionner le membre d'équipage",

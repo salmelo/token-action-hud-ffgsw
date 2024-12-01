@@ -9,6 +9,7 @@
   * If the vehicle has more than 1 weapon open a dialog to choose the weapon after use a crew action with a use weapon role
   * Add an action to recover stress after combat into utility tab
   * Vehicle weapons are always displayed. The setting option to display unequipped items is not used for these items
+  * Display an error message if an action is not possible because something is missing (skill, weapon, ...)
 * Fixes:
   * Refactoring code and remove deprecated functions for TAH version 2.x
   * Skill name is translated for the Dice pool dialog and the chat message
