@@ -12,7 +12,7 @@
       "skills": "Compétences",
       "settings": {
         "displayUnequipped": {
-          "hint": "Sélectionner pour afficher les armes non équipé",
+          "hint": "Sélectionner pour afficher les armes non équipées",
           "name": "Afficher non-équipé"
         }
       }

@@ -91,7 +91,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             for (const [itemId, itemData] of this.items) {
 
-                if (this.#isEquippedItem(itemData)) {
+                if (this.#isEquippedItem(itemData) || itemData.type === "shipweapon") {
                     switch (itemData.type) {
                         case "shipweapon":
                             actionType = "shipweapon"
@@ -167,7 +167,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @private
          */
         async #buildCrewSkills() {
-            const ship = this.actor;
             const crew = await this.actor.getFlag("starwarsffg", "crew");
             if (!crew || crew.length === 0) {
                 CONFIG.logger.warn("Could not find crew for vehicle or could not find relevant skill; presenting default roller");
