@@ -1,6 +1,6 @@
 # Changelog
 
-`12.2.1.1_903`
+`12.3.0.1_903`
 
 * Features:
   * Add tooltip for weapons (Range, damage and critical values)

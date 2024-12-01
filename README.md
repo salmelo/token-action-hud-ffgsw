@@ -35,7 +35,7 @@ Changelog are available [here](https://github.com/TeddyBears/token-action-hud-ff
 
 ## Wiki
 
-More information about available actions can be found in the [wiki](https://github.com/TeddyBears/token-action-hud-ffgsw/wiki)
+More information about available actions can be found in the [wiki](https://github.com/TeddyBears/token-action-hud-ffgsw/wiki/Wiki)
 
 ## Support
 
