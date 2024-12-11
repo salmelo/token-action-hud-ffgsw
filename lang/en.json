@@ -27,6 +27,20 @@
         "dialog.title": "Post-Encounter strain recovery",
         "recover": "Recover",
         "balance": "balance"
+      },
+      "boost": {
+        "name": "Boost",
+        "actionAdd": "Add boost dice",
+        "actionReduce": "Reduce boost dice"
+      },
+      "setback": {
+        "name": "Setback",
+        "actionAdd": "Add setback dice",
+        "actionReduce": "Reduce boost dice"
+      },
+      "action": {
+        "miss": "You should click on Minus or Plus icon",
+        "selectMiss": "Please select only one token"
       }
     },
     "error": {

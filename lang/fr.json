@@ -27,6 +27,22 @@
         "dialog.title": "Récupération de stress après combat",
         "recover": "Soigner",
         "balance": "sérénité"
+      },
+      "boost": {
+        "name": "Fortune",
+        "actionAdd": "Ajouter",
+        "actionReduce": "Retirer"
+      },
+      "setback": {
+        "name": "infortune",
+        "actionAdd": "Ajouter",
+        "actionReduce": "Retirer"
+      },
+      "action": {
+        "miss": "You should click on Minus or Plus icon",
+        "selectMiss": "Please select only one token",
+        "add": "Ajouter",
+        "reduce": "Retirer"
       }
     },
     "error": {

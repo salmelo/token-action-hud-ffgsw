@@ -1,7 +1,8 @@
 export let RollHandler = null
 import { get_dice_pool } from "../../../systems/starwarsffg/modules/helpers/dice-helpers.js";
 import { skills as skillsList } from "../../../systems/starwarsffg/modules/config/ffg-skills.js";
-import { MODULE } from './constants.js'
+//import { EffectCounter} from "../../statuscounter/module/api.js";
+import { MODULE, STATUSEFFECT } from './constants.js'
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     /**
@@ -256,6 +257,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     pool.ability = ability
                 }
             }
+            pool = await this.poolWithEffect(pool, actor)
+            console.log(pool)
             await game.ffg.DiceHelpers.displayRollDialog(
                 actorSheet,
                 pool,
@@ -335,6 +338,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         async macroAction(event, actor, token, actionId) {
+            //console.log("TAH macro", event, actor, token, actionId)
             try {
                 const command = await fetch("modules/" + MODULE.ID + "/content/macros/" + actionId + ".js")
                 if (!command.ok) {
@@ -348,14 +352,37 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     type: "script",
                     author: "",
                     scope: "global",
-                    command: await command.text(),
+                    command: await command.text()
                 }
-                const macro = new Macro(MacroData).execute()
+                const scope = {
+                    "name": MacroData.name,
+                    "tokens": token,
+                    "event": event
+                }
+                const macro = new Macro(MacroData).execute(scope)
             } catch (error) {
                 coreModule.api.Logger.error(actionId, error.message)
                 coreModule.api.Logger.error(error)
                 return null
             }
+        }
+
+        async poolWithEffect(pool, actor) {
+            for (const [id, effectData] of Object.entries(STATUSEFFECT)) {
+                if (effectData.pooleffectdice) {
+                    let addedValue = EffectCounter.findCounterValue(this.token.document, effectData.img)
+                    console.log("POOL 2 :", id, effectData, addedValue)
+                    if (effectData.pooleffectaction === "add" && addedValue > 0) {
+                        pool[effectData.pooleffectdice] += addedValue > 0 ? addedValue : 0
+                    } else {
+                        pool[effectData.pooleffectdice] -= addedValue > 0 ? addedValue : 0
+                    }
+
+                }
+            }
+            let effects = EffectCounter.findCounterValue(this.token.document, STATUSEFFECT.diceboostplus.img)
+
+            return pool
         }
 
 

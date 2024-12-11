@@ -2,7 +2,9 @@
  * Module-based constants
  */
 export const MODULE = {
-    ID: 'token-action-hud-ffgsw'
+    ID: 'token-action-hud-ffgsw',
+    localizeID: "tokenActionHud",
+    iconPath: "modules/token-action-hud-ffgsw/artwork/icons/"
 }
 
 /**
@@ -31,13 +33,12 @@ export const ACTION_TYPE = {
  * Groups
  */
 export const GROUP = {
-    armour: { id: 'armour', name: 'tokenActionHud.template.armor', type: 'system' },
-    gear: { id: 'gear', name: 'tokenActionHud.template.equipment', type: 'system' },
-    //consumables: { id: 'consumables', name: 'tokenActionHud.template.consumables', type: 'system' },
+    armour: { id: 'armour', name: MODULE.localizeID + '.template.armor', type: 'system' },
+    gear: { id: 'gear', name: MODULE.localizeID + '.template.equipment', type: 'system' },
     weapons: { id: 'weapons', name: 'SWFFG.ItemsWeapons', type: 'system' },
-    combat: { id: 'combat', name: 'tokenActionHud.combat', type: 'system' },
-    token: { id: 'token', name: 'tokenActionHud.token', type: 'system' },
-    utility: { id: 'utility', name: 'tokenActionHud.utility', type: 'system' },
+    combat: { id: 'combat', name: MODULE.localizeID + '.combat', type: 'system' },
+    token: { id: 'token', name: MODULE.localizeID + '.token', type: 'system' },
+    utility: { id: 'utility', name: MODULE.localizeID + '.utility', type: 'system' },
     crewskills: { id: 'crewskills', name: 'SWFFG.Crew.Title', type: 'system' },
     General: { id: 'General', name: "SWFFG.SkillsGeneral", type: 'system' },
     Social: { id: 'Social', name: "SWFFG.SkillsSocial", type: 'system' },
@@ -58,8 +59,50 @@ export const ITEM_TYPE = {
 }
 
 /**
-* Item types
+* Macros
 */
 export const MACRO = {
-    strainRecovery: { id: 'stressRecovery', name: "tokenActionHud.macros.strainRecovery.name", type: 'script', groupId: "utility", icon: "icons/svg/regen.svg" },    
+    strainRecovery: { id: 'stressRecovery', name: MODULE.localizeID + ".macros.strainRecovery.name", type: 'script', groupId: "utility", icon: "icons/svg/regen.svg" },
+    diceboost: {
+        id: 'diceboost', name: MODULE.localizeID + ".macros.boost.name", type: 'script', groupId: "combat", icon: "systems/starwarsffg/images/dice/starwars/blue.png",
+        cssClass: "minus-plus", icon1: '<i id="diceboost-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="diceboost-plus" class="fas fa-plus" title="Add"></i>'
+    },
+    dicesetback: {
+        id: 'dicesetback', name: MODULE.localizeID + ".macros.setback.name", type: 'script', groupId: "combat", icon: "systems/starwarsffg/images/dice/starwars/black.png",
+        cssClass: "minus-plus", icon1: '<i id="dicesetback-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="dicesetback-plus" class="fas fa-plus" title="Add"></i>'
+    },
+}
+
+/**
+* Status effect
+*/
+export const STATUSEFFECT = {
+    diceboostplus: {
+        "id": 'diceboost-plus-tah',
+        "name": "Add boost dice (tah)",
+        "img": MODULE.iconPath + "diceboost-plus.png",
+        "pooleffectdice": "boost",
+        "pooleffectaction": "add"
+    },
+    diceboostminus: {
+        "id": 'diceboost-minus-tah',
+        "name": "Reduce boost dice (tah)",
+        "img": MODULE.iconPath + "diceboost-minus.png",
+        "pooleffectdice": "boost",
+        "pooleffectaction": "reduce"
+    },
+    dicesetbackplus: {
+        "id": 'setback-plus-tah',
+        "name": "Add setback dice (tah)",
+        "img": MODULE.iconPath + "dicesetback-plus.png",
+        "pooleffectdice": "setback",
+        "pooleffectaction": "add"
+    },
+    dicesetbackminus: {
+        "id": 'setback-minus-tah',
+        "name": "Reduce setback dice (tah)",
+        "img": MODULE.iconPath + "dicesetback-minus.png",
+        "pooleffectdice": "setback",
+        "pooleffectaction": "reduce"
+    },
 }

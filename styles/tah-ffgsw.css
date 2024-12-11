@@ -1,0 +1,19 @@
+#token-action-hud-app #token-action-hud .tah-button-box.minus-plus .tah-icon i {
+    width: var(--tah-button-image-width);
+    background: rgba(0, 0, 0, 0.3);
+    height: calc(var(--tah-button-image-height) - 2px);
+    line-height: var(--tah-button-image-height);
+}
+#token-action-hud-app #token-action-hud .tah-button-box.minus-plus {
+  padding-left:calc(var(--tah-button-image-width) + 10px);
+}
+#token-action-hud-app #token-action-hud .tah-button-box.minus-plus .tah-icon:first-child{
+  position:absolute;
+  left: 0;
+  top:1px;
+}
+#token-action-hud-app #token-action-hud .tah-button-box.minus-plus .tah-icon:nth-child(2){
+  position:absolute;
+  right: 0;
+  top:1px;
+}

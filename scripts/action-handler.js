@@ -177,7 +177,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #buildCrewSkills() {
             const crew = await this.actor.getFlag("starwarsffg", "crew");
             if (!crew || crew.length === 0) {
-                CONFIG.logger.warn("Could not find crew for this vehicle");
+                CONFIG.logger.warn(game.i18n.localize("tokenActionHud.error.CrewMiss"));
                 return;
             }
             const actionType = 'crewSkill'
@@ -231,7 +231,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: game.i18n.localize(MACRO[id].name),
                         img: MACRO[id].icon,
                         listName: this.#getListName("macro", MACRO[id].name),
-                        system: { actionType, actionId: id }
+                        system: { actionType, actionId: id },
+                        cssClass:MACRO[id].cssClass,
+                        icon1:MACRO[id].icon1,
+                        icon2:MACRO[id].icon2,
+                        icon3:MACRO[id].icon3
                     })
 
                     this.addActions(actionData, groupData);

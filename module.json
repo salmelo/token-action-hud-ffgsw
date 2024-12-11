@@ -4,30 +4,33 @@
   "description": "Token Action HUD is a repositionable HUD of actions for a selected token",
   "authors": [
     {
-      "name": "Balebos"
+      "name": "Balebos",
+      "flags": {}
     }
   ],
   "version": "12.3.1.1_903",
   "compatibility": {
     "minimum": "12",
-    "verified": "12"
+    "verified": "12.331"
   },
   "esmodules": [
     "scripts/init.js"
   ],
   "styles": [
-    "styles/tah-template-style.css"
+    "styles/tah-ffgsw.css"
   ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     },
     {
       "lang": "fr",
       "name": "French (Français)",
-      "path": "lang/fr.json"
+      "path": "lang/fr.json",
+      "flags": {}
     }
   ],
   "relationships": {
@@ -58,7 +61,8 @@
       "type": "setup",
       "url": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
       "thumbnail": "modules/token-action-hud-ffgsw/artwork/FFGSW_logo.webp",
-      "loop": false
+      "loop": false,
+      "flags": {}
     }
   ],
   "url": "https://github.com/TeddyBears/token-action-hud-ffgsw",
