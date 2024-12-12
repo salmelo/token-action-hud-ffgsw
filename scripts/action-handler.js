@@ -49,6 +49,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @returns {object}
          */
         async #buildCharacterActions() {
+            console.log("IHI")
             await Promise.all([
                 this.#buildInventory(),
             ])
@@ -133,27 +134,34 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const actionType = 'skill'
             const categoriesSkillsList = this.actor.system.skilltypes
+            console.log(categoriesSkillsList)
             const skillMap = new Map([
                 ["General", new Map()],
                 ["Social", new Map()],
                 ["Knowledge", new Map()],
-                ["Combat", new Map()]
+                ["Combat", new Map()],
+                ["Other", new Map()]
             ]);
 
             for (const [skillId, skillData] of Object.entries(skills)) {
                 if (skillMap.get(skillData.type)) {
                     skillMap.get(skillData.type).set(skillId, skillData);
+                } else {
+                    skillMap.get("Other").set(skillId, skillData);
                 }
 
             }
-            for (const [groupId, categoryData] of Object.entries(categoriesSkillsList)) {
-                const actionData = skillMap.get(categoryData.type);
+            console.log(skillMap)
+            for (const [groupId, categoryData] of skillMap) {
+                console.log(groupId, categoryData)
+                const actionData = skillMap.get(groupId);
+                console.log(actionData)
                 if (!actionData || actionData.size === 0) continue;
 
                 // Create group data
                 const groupData = {
-                    id: categoryData.type,
-                    name: game.i18n.localize(GROUP[categoryData.type].name)
+                    id: groupId,
+                    name: game.i18n.localize(GROUP[groupId]?.name) ? game.i18n.localize(GROUP[groupId].name) : categoryData.type
                 };
 
                 const data = { groupData, actionData, actionType };

@@ -1,5 +1,11 @@
 # Changelog
 
+`12.3.1.1_903`
+
+* Fixes:
+  * Add new skill category "Other". Imported skills that don't belong to standard categories are assign to tis new category
+  * Use the standard skill list for the translated label or the skill lable for imported skill
+
 `12.3.0.1_903`
 
 * Features:

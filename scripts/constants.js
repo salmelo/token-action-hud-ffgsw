@@ -43,6 +43,7 @@ export const GROUP = {
     Social: { id: 'Social', name: "SWFFG.SkillsSocial", type: 'system' },
     Knowledge: { id: 'Knowledge', name: "SWFFG.SkillsKnowledge", type: 'system' },
     Combat: { id: 'Combat', name: "SWFFG.SkillsCombat", type: 'system' },
+    Other: { id: 'Other', name: "Other", type: 'system' },
 }
 
 /**

@@ -42,10 +42,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 },
 
                 groups: [
-                    { ...groups.General, nestId: 'skills_General' },
+                    { ...groups.General, nestId: 'skills_general' },
                     { ...groups.Social, nestId: 'skills_social' },
                     { ...groups.Knowledge, nestId: 'skills_knowledge' },
-                    { ...groups.crewskills, nestId: 'skills_Crewskills' },
+                    { ...groups.crewskills, nestId: 'skills_crewskills' },
+                    { ...groups.Other, nestId: 'skills_otherskills' },
 
                 ]
             },

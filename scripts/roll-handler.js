@@ -55,7 +55,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} token
          * @param {string} actionId
          */
-        async handleAction(event, actionType, actor, token, actionId) {            
+        async handleAction(event, actionType, actor, token, actionId) {
             switch (actionType) {
                 case "crewSkill":
                     this.crewAction(event, actor, actionId); break;
@@ -116,7 +116,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 const skillRoles = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_skill === weapon.system.skill.value);
                 const crewGunners = crew.filter(member => skillRoles.some(role => role.role_name === member.role));
                 if (crewGunners.length === 0) {
-                    ui.notifications.warn(game.i18n.format("tokenActionHud.error.crewWeaponSkillMiss", {skilllabel:game.i18n.localize("SWFFG.SkillsName"+weapon.system.skill.value)}));
+                    ui.notifications.warn(game.i18n.format("tokenActionHud.error.crewWeaponSkillMiss", { skilllabel: game.i18n.localize("SWFFG.SkillsName" + weapon.system.skill.value) }));
                     return null
 
                 } else if (crewGunners.length > 1) {
@@ -241,7 +241,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async rollSkill(event, actor, skillId, cardData = null, startingPool = { 'difficulty': 2 }) {
             const actorSheet = await actor.sheet.getData();
             let pool = new DicePoolFFG(startingPool);
-            const skillName = skillsList[skillId].label
+            const skillName = skillsList[skillId]?.label ? skillsList[skillId].label : actor.system.skills[skillId].label
 
             pool = get_dice_pool(actor.id, skillId, pool)
 
