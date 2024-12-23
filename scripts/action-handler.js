@@ -1,5 +1,5 @@
 // System Module Imports
-import { ACTION_TYPE, GROUP, MACRO } from './constants.js'
+import { ACTION_TYPE, GROUP, MACRO, MODULE } from './constants.js'
 import { Utils } from './utils.js'
 
 export let ActionHandler = null
@@ -49,7 +49,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @returns {object}
          */
         async #buildCharacterActions() {
-            console.log("IHI")
             await Promise.all([
                 this.#buildInventory(),
             ])
@@ -134,7 +133,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const actionType = 'skill'
             const categoriesSkillsList = this.actor.system.skilltypes
-            console.log(categoriesSkillsList)
             const skillMap = new Map([
                 ["General", new Map()],
                 ["Social", new Map()],
@@ -151,11 +149,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
 
             }
-            console.log(skillMap)
             for (const [groupId, categoryData] of skillMap) {
-                console.log(groupId, categoryData)
                 const actionData = skillMap.get(groupId);
-                console.log(actionData)
                 if (!actionData || actionData.size === 0) continue;
 
                 // Create group data
@@ -219,28 +214,36 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             for (const [id, macroData] of Object.entries(MACRO)) {
                 try {
-                    const actionType = "macro"
-                    const groupData = {
-                        id: macroData.groupId,
-                        name: game.i18n.localize(GROUP[macroData.groupId].name),
-                        type: 'system'
-                    }
-                    const actionData = new Array()
-                    actionData.push({
-                        id: id,
-                        name: game.i18n.localize(MACRO[id].name),
-                        img: MACRO[id].icon,
-                        listName: this.#getListName("macro", MACRO[id].name),
-                        system: { actionType, actionId: id },
-                        cssClass:MACRO[id].cssClass,
-                        icon1:MACRO[id].icon1,
-                        icon2:MACRO[id].icon2,
-                        icon3:MACRO[id].icon3
-                    })
+                    
+                    //If the macro is allowed from module settings
+                    if (macroData?.conditionSetting) {
+                        if (game.settings.get(MODULE.ID, macroData?.conditionSetting) == true) {
+                            const actionType = "macro"
+                            const groupData = {
+                                id: macroData.groupId,
+                                name: game.i18n.localize(GROUP[macroData.groupId].name),
+                                type: 'system'
+                            }
+                            const actionData = new Array()
+                            actionData.push({
+                                id: id,
+                                name: game.i18n.localize(MACRO[id].name),
+                                img: MACRO[id].img,
+                                listName: this.#getListName("macro", MACRO[id].name),
+                                system: { actionType, actionId: id },
+                                cssClass: MACRO[id].cssClass,
+                                icon1: MACRO[id].icon1,
+                                icon2: MACRO[id].icon2,
+                                icon3: MACRO[id].icon3
+                            })
 
-                    this.addActions(actionData, groupData);
+                            this.addActions(actionData, groupData);
+                        }
+                    }
+
                 } catch (error) {
-                    coreModule.api.Logger.error(actionId)
+                    coreModule.api.Logger.error(id)
+                    coreModule.api.Logger.error(error.message)
                     return null
                 }
             }

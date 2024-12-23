@@ -1,6 +1,6 @@
 import { SystemManager } from './system-manager.js'
 import { MODULE, REQUIRED_CORE_MODULE_VERSION } from './constants.js'
-import {addStatusEffect} from './statuseffect.js'
+import { addStatusEffect } from './statuseffect.js'
 
 Hooks.on('tokenActionHudCoreApiReady', async () => {
     /**
@@ -12,6 +12,12 @@ Hooks.on('tokenActionHudCoreApiReady', async () => {
         SystemManager
     }
     Hooks.call('tokenActionHudSystemReady', module)
-
-    await addStatusEffect()
+    
+    Hooks.once('tokenActionHudSystemReady', async () => {
+        console.log("tah", game.settings.get(MODULE.ID, "tahst-addstatuseffect"))
+        if (game.settings.get(MODULE.ID, "tahst-addstatuseffect") === true) {
+            await addStatusEffect()
+        }
+    })
+    
 })

@@ -1,5 +1,10 @@
 # Changelog
 
+`12.4.0.1_903`
+
+* Fixes:
+  * Take weapon status to manage vehicule weapon difficulty
+
 `12.3.1.1_903`
 
 * Fixes:

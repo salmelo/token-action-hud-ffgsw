@@ -15,7 +15,8 @@
           "hint": "Sélectionner pour afficher les armes non équipées",
           "name": "Afficher non-équipé"
         }
-      }
+      },
+      "dices":"Dés de bonus / malus"
     },
     "macros": {
       "strainRecovery": {
@@ -34,7 +35,7 @@
         "actionReduce": "Retirer"
       },
       "setback": {
-        "name": "infortune",
+        "name": "Infortune",
         "actionAdd": "Ajouter",
         "actionReduce": "Retirer"
       },

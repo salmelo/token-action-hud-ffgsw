@@ -14,8 +14,28 @@
         "displayUnequipped": {
           "hint": "Choose whether to display unequipped items on the HUD",
           "name": "Display Unequipped"
+        },
+        "statuseffect": {
+          "menu": {
+            "hint": "Options for adding status effects to dice rolls",
+            "name": "Statuts effects",
+            "label":"Configure Status effects"
+          },
+          "dicesroll": {
+            "hint": "",
+            "name": "Apply status effects on dice roll"
+          },
+          "addstatuseffect": {
+            "hint": "Status effects have 'TAH' in their name",
+            "name": "Adds status effects for dice rolls"
+          },
+          "dicesbonus": {
+            "hint": "Actions can be found in the Utility tab",
+            "name": "Allows to add status effects from TAH"
+          }
         }
-      }
+      },
+      "dices": "Dice bonus / malus"
     },
     "macros": {
       "strainRecovery": {

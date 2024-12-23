@@ -45,6 +45,7 @@ export const GROUP = {
     Knowledge: { id: 'Knowledge', name: "SWFFG.SkillsKnowledge", type: 'system' },
     Combat: { id: 'Combat', name: "SWFFG.SkillsCombat", type: 'system' },
     Other: { id: 'Other', name: "Other", type: 'system' },
+    Dices: { id: 'Dices', name: MODULE.localizeID + ".template.dices", type: 'system' },
 }
 
 /**
@@ -64,12 +65,14 @@ export const ITEM_TYPE = {
 export const MACRO = {
     strainRecovery: { id: 'stressRecovery', name: MODULE.localizeID + ".macros.strainRecovery.name", type: 'script', groupId: "utility", icon: "icons/svg/regen.svg" },
     diceboost: {
-        id: 'diceboost', name: MODULE.localizeID + ".macros.boost.name", type: 'script', groupId: "combat", icon: "systems/starwarsffg/images/dice/starwars/blue.png",
-        cssClass: "minus-plus", icon1: '<i id="diceboost-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="diceboost-plus" class="fas fa-plus" title="Add"></i>'
+        id: 'diceboost', name: MODULE.localizeID + ".macros.boost.name", type: 'script', groupId: "Dices", img: "systems/starwarsffg/images/dice/starwars/blue.png",
+        cssClass: "minus-plus", icon1: '<i id="diceboost-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="diceboost-plus" class="fas fa-plus" title="Add"></i>',
+        conditionSetting:"tahst-dicesbonus"
     },
     dicesetback: {
-        id: 'dicesetback', name: MODULE.localizeID + ".macros.setback.name", type: 'script', groupId: "combat", icon: "systems/starwarsffg/images/dice/starwars/black.png",
-        cssClass: "minus-plus", icon1: '<i id="dicesetback-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="dicesetback-plus" class="fas fa-plus" title="Add"></i>'
+        id: 'dicesetback', name: MODULE.localizeID + ".macros.setback.name", type: 'script', groupId: "Dices", img: "systems/starwarsffg/images/dice/starwars/black.png",
+        cssClass: "minus-plus", icon1: '<i id="dicesetback-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="dicesetback-plus" class="fas fa-plus" title="Add"></i>',
+        conditionSetting:"tahst-dicesbonus"
     },
 }
 
