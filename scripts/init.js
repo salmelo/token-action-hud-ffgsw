@@ -14,7 +14,6 @@ Hooks.on('tokenActionHudCoreApiReady', async () => {
     Hooks.call('tokenActionHudSystemReady', module)
     
     Hooks.once('tokenActionHudSystemReady', async () => {
-        console.log("tah", game.settings.get(MODULE.ID, "tahst-addstatuseffect"))
         if (game.settings.get(MODULE.ID, "tahst-addstatuseffect") === true) {
             await addStatusEffect()
         }

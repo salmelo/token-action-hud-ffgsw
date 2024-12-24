@@ -38,19 +38,29 @@
         "name": "Infortune",
         "actionAdd": "Ajouter",
         "actionReduce": "Retirer"
+      }
+    },
+    "statuseffects":{
+      "diceboostplus":{
+        "name":"Ajoute un dé de Fortune (TAH)"
       },
-      "action": {
-        "miss": "You should click on Minus or Plus icon",
-        "selectMiss": "Please select only one token",
-        "add": "Ajouter",
-        "reduce": "Retirer"
+      "diceboostminus":{
+        "name":"Retire un dé de Fortune (TAH)"
+      },
+      "dicesetbackplus":{
+        "name":"Ajoute un dé d'Infortune (TAH)"
+      },
+      "dicesetbackminus":{
+        "name":"Retire un dé d'Infortune (TAH)"
       }
     },
     "error": {
       "crewWeaponSkillMiss": "Aucun rôle d'équipage pour cette compétence: {skilllabel}",
       "CrewMiss": "Aucun équipage trouvé pour ce véhicule",
       "weaponMiss": "Aucune arme trouvée pour ce véhicule",
-      "macroCommandMiss": "Aucune commande trouvée pour cette macro"
+      "macroCommandMiss": "Aucune commande trouvée pour cette macro",
+      "selectMiss": "Vous devez sélectionner un token et un seul",
+      "dicesMiss": "Vous devez cliquer sur les icons 'Moins ou 'Plus'"
     }
   },
   "SWFFG.Crew.Roles.Weapon.Title": "Sélectionner le membre d'équipage",

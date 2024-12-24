@@ -65,8 +65,6 @@ export async function register(coreUpdate) {
         }
     })
 
-
-    console.log("tah", game.settings.get(MODULE.ID, "tahst-addstatuseffect"))
     if (game.settings.get(MODULE.ID, "tahst-addstatuseffect") == true) {
         await addStatusEffect()
     }

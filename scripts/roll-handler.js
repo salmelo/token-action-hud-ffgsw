@@ -250,13 +250,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {string} skillId      The skill id
          * @param {object} cardData     The card data
          * @param {object} startingPool The startingPool
+         * @param {object} weapon       The weapon
          */
         async rollSkill(event, actor, skillId, cardData = null, startingPool = { 'difficulty': 2 }, weapon) {
             const actorSheet = await actor.sheet.getData();
+            let pool = new DicePoolFFG(startingPool);
             const skillName = skillsList[skillId]?.label ? skillsList[skillId].label : actor.system.skills[skillId].label
 
-            let pool = get_dice_pool(actor.id, skillId, startingPool)
-            console.log("TAH rollskill 2", startingPool, pool, skillName)
+            pool = get_dice_pool(actor.id, skillId, pool)
 
             if (actor.type === "minion") {
                 if (actor.system.skills[skillId].groupskill) {
@@ -275,9 +276,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             if (game.settings.get(MODULE.ID, "tahst-dicesroll") == true) {
-                pool = await this.poolWithEffect(pool, actor)
+                const token = actor.getActiveTokens()
+                pool = await this.poolWithEffect(pool, token[0])
             }
-            console.log("TAH rollskill 3", pool)
+
             await game.ffg.DiceHelpers.displayRollDialog(
                 actorSheet,
                 pool,
@@ -304,9 +306,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     "role": crewRole,
                 }
             }
-            //const status = game.ffg.DiceHelpers.getWeaponStatus(weapon);
             var startingPool = { 'difficulty': 2 }
-            //startingPool = new DicePoolFFG(await game.ffg.DiceHelpers.getModifiers(startingPool, weapon));
             this.rollSkill(event, game.actors.get(crewId), weapon.system.skill.value, foundry.utils.mergeObject(weapon, cardData), startingPool, weapon)
         }
 
@@ -388,10 +388,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
         }
 
-        async poolWithEffect(pool, actor) {
+        async poolWithEffect(pool, token) {
             for (const [id, effectData] of Object.entries(STATUSEFFECT)) {
                 if (effectData.pooleffectdice) {
-                    let addedValue = EffectCounter.findCounterValue(this.token.document, effectData.img)
+                    let addedValue = EffectCounter.findCounterValue(token.document, effectData.img)
                     if (effectData.pooleffectaction === "add" && addedValue > 0) {
                         pool[effectData.pooleffectdice] += addedValue > 0 ? addedValue : 0
                     } else {
@@ -400,7 +400,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
                 }
             }
-            let effects = EffectCounter.findCounterValue(this.token.document, STATUSEFFECT.diceboostplus.img)
 
             return pool
         }
@@ -408,8 +407,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async getWeaponPoolModifiers(weapon, pool) {
             if (weapon?.type === "weapon" || weapon?.type === "shipweapon") {
                 const status = game.ffg.DiceHelpers.getWeaponStatus(weapon);
-                pool.difficulty += pool.difficulty + status.difficulty
-                pool.setback += pool.difficulty + status.setback
+                pool.difficulty += status.difficulty
+                pool.setback += status.setback
                 pool = new DicePoolFFG(await game.ffg.DiceHelpers.getModifiers(pool, weapon));
             }
             return pool

@@ -19,7 +19,7 @@
           "menu": {
             "hint": "Options for adding status effects to dice rolls",
             "name": "Statuts effects",
-            "label":"Configure Status effects"
+            "label": "Configure Status effects"
           },
           "dicesroll": {
             "hint": "",
@@ -59,15 +59,31 @@
         "actionReduce": "Reduce boost dice"
       },
       "action": {
-        "miss": "You should click on Minus or Plus icon",
+        "miss": "You should click on 'Minus' or 'Plus' icon",
         "selectMiss": "Please select only one token"
+      }
+    },
+    "statuseffects": {
+      "diceboostplus": {
+        "name": "Add boost dice (TAH)"
+      },
+      "diceboostminus": {
+        "name": "Reduce boost dice (TAH)"
+      },
+      "dicesetbackplus": {
+        "name": "Add setback dice (TAH)"
+      },
+      "dicesetbackminus": {
+        "name": "Reduce setback dice (TAH)"
       }
     },
     "error": {
       "crewWeaponSkillMiss": "Could not find crew role for this skill: {skilllabel}",
       "CrewMiss": "Could not find crew for this vehicle",
       "weaponMiss": "Could not find weapon for this vehicle",
-      "macroCommandMiss": "Could not find command for the macro"
+      "macroCommandMiss": "Could not find command for the macro",
+      "dicesMiss": "You should click on 'Minus' or 'Plus' icon",
+      "selectMiss": "Please select only one token"
     }
   }
 }

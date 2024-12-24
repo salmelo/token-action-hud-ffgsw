@@ -10,13 +10,13 @@ async function main() {
     // scope come from the call of the macro in roll-handler.js
 
     if (!scope.tokens) {
-        ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".macros.action.selectMiss")}`);
+        ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.selectMiss")}`);
         return;
     }
 
     const actionSource = scope.event.srcElement
     if (!(actionSource.className.toLowerCase().search("plus") >= 0 || actionSource.className.toLowerCase().search("minus") >= 0)) {
-        ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".macros.action.miss")}`);
+        ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.dicesMiss")}`);
         return
     }
 

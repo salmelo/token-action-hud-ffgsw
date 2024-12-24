@@ -214,7 +214,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             for (const [id, macroData] of Object.entries(MACRO)) {
                 try {
-                    
+
                     //If the macro is allowed from module settings
                     if (macroData?.conditionSetting) {
                         if (game.settings.get(MODULE.ID, macroData?.conditionSetting) == true) {
@@ -239,6 +239,27 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
                             this.addActions(actionData, groupData);
                         }
+                    } else {
+                        const actionType = "macro"
+                        const groupData = {
+                            id: macroData.groupId,
+                            name: game.i18n.localize(GROUP[macroData.groupId].name),
+                            type: 'system'
+                        }
+                        const actionData = new Array()
+                        actionData.push({
+                            id: id,
+                            name: game.i18n.localize(MACRO[id].name),
+                            img: MACRO[id].img,
+                            listName: this.#getListName("macro", MACRO[id].name),
+                            system: { actionType, actionId: id },
+                            cssClass: MACRO[id].cssClass,
+                            icon1: MACRO[id].icon1,
+                            icon2: MACRO[id].icon2,
+                            icon3: MACRO[id].icon3
+                        })
+
+                        this.addActions(actionData, groupData);
                     }
 
                 } catch (error) {

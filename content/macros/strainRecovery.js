@@ -123,7 +123,6 @@ async function show_strain_recovery_popup(using_actor, current_strain) {
                 label: game.i18n.localize(MODULE.localizeID + ".macros.strainRecovery.recover"),
                 default: true,
                 callback: async (event, button, dialog) => {
-                    console.log(button.form.elements.selected_skill.value)
                     if (button.form.elements.selected_skill.value == "Cool") {
                         await recover(using_actor, cool_pool, current_strain)
                     } else {

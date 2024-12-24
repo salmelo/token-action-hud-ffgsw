@@ -63,15 +63,15 @@ export const ITEM_TYPE = {
 * Macros
 */
 export const MACRO = {
-    strainRecovery: { id: 'stressRecovery', name: MODULE.localizeID + ".macros.strainRecovery.name", type: 'script', groupId: "utility", icon: "icons/svg/regen.svg" },
+    strainRecovery: { id: 'stressRecovery', name: MODULE.localizeID + ".macros.strainRecovery.name", type: 'script', groupId: "utility", img: "icons/svg/regen.svg" },
     diceboost: {
         id: 'diceboost', name: MODULE.localizeID + ".macros.boost.name", type: 'script', groupId: "Dices", img: "systems/starwarsffg/images/dice/starwars/blue.png",
-        cssClass: "minus-plus", icon1: '<i id="diceboost-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="diceboost-plus" class="fas fa-plus" title="Add"></i>',
+        cssClass: "minus-plus", icon1: '<i id="diceboost-minus" class="fas fa-minus"></i>', icon2: '<i id="diceboost-plus" class="fas fa-plus"></i>',
         conditionSetting:"tahst-dicesbonus"
     },
     dicesetback: {
         id: 'dicesetback', name: MODULE.localizeID + ".macros.setback.name", type: 'script', groupId: "Dices", img: "systems/starwarsffg/images/dice/starwars/black.png",
-        cssClass: "minus-plus", icon1: '<i id="dicesetback-minus" class="fas fa-minus" title="Reduce"></i>', icon2: '<i id="dicesetback-plus" class="fas fa-plus" title="Add"></i>',
+        cssClass: "minus-plus", icon1: '<i id="dicesetback-minus" class="fas fa-minus"></i>', icon2: '<i id="dicesetback-plus" class="fas fa-plus"></i>',
         conditionSetting:"tahst-dicesbonus"
     },
 }
@@ -82,28 +82,28 @@ export const MACRO = {
 export const STATUSEFFECT = {
     diceboostplus: {
         "id": 'diceboost-plus-tah',
-        "name": "Add boost dice (tah)",
+        "name": MODULE.localizeID + ".statuseffects.diceboostplus.name",
         "img": MODULE.iconPath + "diceboost-plus.png",
         "pooleffectdice": "boost",
         "pooleffectaction": "add"
     },
     diceboostminus: {
         "id": 'diceboost-minus-tah',
-        "name": "Reduce boost dice (tah)",
+        "name": MODULE.localizeID + ".statuseffects.diceboostminus.name",
         "img": MODULE.iconPath + "diceboost-minus.png",
         "pooleffectdice": "boost",
         "pooleffectaction": "reduce"
     },
     dicesetbackplus: {
         "id": 'setback-plus-tah',
-        "name": "Add setback dice (tah)",
+        "name": MODULE.localizeID + ".statuseffects.dicesetbackplus.name",
         "img": MODULE.iconPath + "dicesetback-plus.png",
         "pooleffectdice": "setback",
         "pooleffectaction": "add"
     },
     dicesetbackminus: {
         "id": 'setback-minus-tah',
-        "name": "Reduce setback dice (tah)",
+        "name": MODULE.localizeID + ".statuseffects.dicesetbackminus.name",
         "img": MODULE.iconPath + "dicesetback-minus.png",
         "pooleffectdice": "setback",
         "pooleffectaction": "reduce"
