@@ -17,17 +17,17 @@
         },
         "statuseffect": {
           "menu": {
-            "hint": "Options for adding status effects to dice rolls",
+            "hint": "Options for adding status effects to dices rolls",
             "name": "Statuts effects",
             "label": "Configure Status effects"
           },
           "dicesroll": {
             "hint": "",
-            "name": "Apply status effects on dice roll"
+            "name": "Apply status effects for dices roll"
           },
           "addstatuseffect": {
             "hint": "Status effects have 'TAH' in their name",
-            "name": "Adds status effects for dice rolls"
+            "name": "Adds status effects for dices rolls"
           },
           "dicesbonus": {
             "hint": "Actions can be found in the Utility tab",
@@ -83,7 +83,8 @@
       "weaponMiss": "Could not find weapon for this vehicle",
       "macroCommandMiss": "Could not find command for the macro",
       "dicesMiss": "You should click on 'Minus' or 'Plus' icon",
-      "selectMiss": "Please select only one token"
+      "selectMiss": "Please select only one token",
+      "statuscounter":"You should activate the module 'Status Icon Counters' to allow status effects from TAH"
     }
   }
 }

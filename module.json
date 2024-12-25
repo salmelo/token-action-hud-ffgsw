@@ -51,7 +51,18 @@
         "type": "module",
         "compatibility": {
           "minimum": "2.0.0",
-          "verified": "2.0.8"
+          "verified": "2.0.10"
+        }
+      }
+    ],
+    "Recommended": [
+      {
+        "id": "statuscounter",
+        "type": "module",
+        "manifest":"https://gitlab.com/woodentavern/status-icon-counters/-/raw/master/src/module.json",
+        "compatibility": {
+          "minimum": "2.1.0",
+          "verified": "2.1.3"
         }
       }
     ]

@@ -20,6 +20,11 @@ async function main() {
         return
     }
 
+    if (!game.modules.get("statuscounter").active) {
+        ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.statuscounter")}`);
+        return
+    }
+
     var increment = 0
     let tokenDoc = scope.tokens.document;
     let iconPathPlus = MODULE.iconPath + "dicesetback-plus.png"

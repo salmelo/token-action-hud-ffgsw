@@ -389,6 +389,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         async poolWithEffect(pool, token) {
+            if (!game.modules.get("statuscounter").active) {
+                ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.statuscounter")}`);
+                return pool
+            }
             for (const [id, effectData] of Object.entries(STATUSEFFECT)) {
                 if (effectData.pooleffectdice) {
                     let addedValue = EffectCounter.findCounterValue(token.document, effectData.img)

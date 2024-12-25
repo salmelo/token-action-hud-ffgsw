@@ -27,6 +27,7 @@ export async function register(coreUpdate) {
         icon: "fa-thin fa-sparkles",
         type: StatusEffectForm,
         restricted: true,
+        requiresReload: true
     });
 
     game.settings.register(MODULE.ID, 'tahst-addstatuseffect', {
@@ -36,8 +37,9 @@ export async function register(coreUpdate) {
         config: false,
         type: Boolean,
         default: false,
-        onChange: () => {
+        onChange: (value) => {
             location.reload();
+
         }
     })
 
@@ -48,8 +50,9 @@ export async function register(coreUpdate) {
         config: false,
         type: Boolean,
         default: false,
-        onChange: () => {
+        onChange: (value) => {
             location.reload();
+
         }
     })
 
@@ -60,8 +63,9 @@ export async function register(coreUpdate) {
         config: false,
         type: Boolean,
         default: false,
-        onChange: () => {
+        onChange: (value) => {
             location.reload();
+
         }
     })
 
@@ -166,6 +170,11 @@ export class StatusEffectForm extends HandlebarsApplicationMixin(ApplicationV2) 
     /* -------------------------------------------- */
 
     static async submit(event, form, formData) {
+        console.log('tah submit')
+        if (!game.modules.get("statuscounter").active) {
+            ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.statuscounter")}`);
+            return
+        }
         for (const [key, value] of Object.entries(formData.object)) {
             if (value !== this.context[key]) {
                 await game.settings.set(MODULE.ID, key, value);

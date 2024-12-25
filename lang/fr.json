@@ -60,7 +60,8 @@
       "weaponMiss": "Aucune arme trouvée pour ce véhicule",
       "macroCommandMiss": "Aucune commande trouvée pour cette macro",
       "selectMiss": "Vous devez sélectionner un token et un seul",
-      "dicesMiss": "Vous devez cliquer sur les icons 'Moins ou 'Plus'"
+      "dicesMiss": "Vous devez cliquer sur les icons 'Moins ou 'Plus'",
+      "statuscounter":"Vous devez activer le module 'Status Icon Counters' pour permettre les effects d'état depuis TAH"
     }
   },
   "SWFFG.Crew.Roles.Weapon.Title": "Sélectionner le membre d'équipage",
