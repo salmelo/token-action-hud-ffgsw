@@ -28,6 +28,7 @@ Token Action HUD is a repositionable HUD of actions for a selected token.
 ### Required Modules
 
 **IMPORTANT** - Token Action HUD Template requires the [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) module to be installed.
+If you want to use the status effects options, the module [Status Icon Counters](https://foundryvtt.com/packages/statuscounter) is required
 
 ## Changelog
 

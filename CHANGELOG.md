@@ -2,8 +2,13 @@
 
 `12.4.0.1_903`
 
+* Features:
+  * Allow status effects for boost and setback dices in the module settings
+  * Allow actions to add status effect for boost and setback dices in the module settings
+  * Allow the new status effects to affect roll in the module settings
 * Fixes:
-  * Take weapon status to manage vehicule weapon difficulty
+  * Use weapon status to manage vehicle weapon difficulty for dices rolls
+  * Use item attachement modifiers for weapon dice rolls
 
 `12.3.1.1_903`
 
