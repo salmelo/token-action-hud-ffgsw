@@ -1,0 +1,49 @@
+<div id="token-action-hud-ffgsw-form" class="standard-form">
+    <div class="standard-form scrollable">
+        {{#each data}}
+        <div class="form-group">
+            <label for="{{this.module}}.{{this.key}}">{{this.name}}</label>
+            <div class="form-fields">
+                {{#if this.filePicker}}
+                <button class="file-picker" data-target="{{this.module}}.{{this.key}}" data-type="
+                            {{~#iff_custom 'animation' 'in' this.key~}}
+                                {{~#iff_custom 'sound' 'not in' this.key~}}
+                                    video
+                                {{~/iff_custom~}}
+                            {{~/iff_custom~}}
+                            {{~#iff_custom 'sound' 'in' this.key~}}
+                                audio
+                            {{~/iff_custom~}}
+                            {{~#iff_custom 'music' 'in' this.key~}}
+                                audio
+                            {{~/iff_custom~}}
+                            {{~#iff_custom 'status' 'in' this.key~}}
+                                image
+                            {{~/iff_custom~}}
+                            " title="Browse Files" type="button"><i class="fas fa-file-import fa-fw"></i></button>
+                <input data-dtype="{{this.type}}" name="{{this.module}}.{{this.key}}" type="text"
+                    value="{{this.value}}" />
+
+                {{else}}
+                    <input type="checkbox" data-dtype="{{this.type}}"  id="{{this.module}}.{{this.key}}" name="{{this.key}}" {{checked this.value}}>
+                {{/if}}
+
+            </div>
+            {{#if this.hint}}
+                <p class="hint">{{this.hint}}</p>
+            {{/if}}
+
+        </div>
+        {{else}}
+        <p class="notes">{{localize 'SETTINGS.None'}}</p>
+        {{/each}}
+    </div>
+    <footer class="form-footer" data-application-part="footer">
+        <button type="button" data-action="reset" class="reset-button bright">
+            <i class="fas fa-arrow-rotate-left"></i>{{localize "tokenActionHud.resetToDefault"}}
+        </button>
+        <button type="submit" class="save-button">
+            <i class="fas fa-solid fa-floppy-disk"></i>{{localize "tokenActionHud.saveAndClose"}}
+        </button>
+    </footer>
+</div>
