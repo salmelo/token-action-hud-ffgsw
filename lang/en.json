@@ -27,7 +27,7 @@
           },
           "addstatuseffect": {
             "hint": "Status effects have 'TAH' in their name",
-            "name": "Adds status effects for dices rolls"
+            "name": "Adds status effects for dices"
           },
           "dicesbonus": {
             "hint": "Actions can be found in the Utility tab",
