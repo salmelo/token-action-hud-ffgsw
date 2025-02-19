@@ -95,14 +95,14 @@ export const STATUSEFFECT = {
         "pooleffectaction": "reduce"
     },
     dicesetbackplus: {
-        "id": 'setback-plus-tah',
+        "id": 'dicesetback-plus-tah',
         "name": MODULE.localizeID + ".statuseffects.dicesetbackplus.name",
         "img": MODULE.iconPath + "dicesetback-plus.png",
         "pooleffectdice": "setback",
         "pooleffectaction": "add"
     },
     dicesetbackminus: {
-        "id": 'setback-minus-tah',
+        "id": 'dicesetback-minus-tah',
         "name": MODULE.localizeID + ".statuseffects.dicesetbackminus.name",
         "img": MODULE.iconPath + "dicesetback-minus.png",
         "pooleffectdice": "setback",

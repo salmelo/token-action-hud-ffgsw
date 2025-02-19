@@ -29,23 +29,26 @@ async function main() {
     let tokenDoc = scope.tokens.document;
     let iconPathPlus = MODULE.iconPath + "dicesetback-plus.png"
     let iconPathMinus = MODULE.iconPath + "dicesetback-minus.png"
-    let effectCounter = EffectCounter.findCounter(tokenDoc, iconPathPlus) || EffectCounter.findCounter(tokenDoc, iconPathMinus)
-    var creationState = new Set();
+    let statusIdPlus = "dicesetback-plus-tah"
+    let statusIdMinus = "dicesetback-minus-tah"
+    let effect = scope.tokens.actor.effects.find(e => e.img === iconPathPlus) || scope.tokens.actor.effects.find(e => e.img === iconPathMinus)
 
-    if (effectCounter) {
+    if (effect) {
         //check if the call is to Add or reduce dices
-        if ((actionSource.className.toLowerCase().search("plus") >= 0 && effectCounter.path === iconPathPlus)
-            || (actionSource.className.toLowerCase().search("minus") >= 0 && effectCounter.path === iconPathMinus)) {
-            increment = 1
+        if ((actionSource.className.toLowerCase().search("plus") >= 0 && effect.img === iconPathPlus)
+            || (actionSource.className.toLowerCase().search("minus") >= 0 && effect.img === iconPathMinus)) {
+            effect.statusCounter.setValue(effect.statusCounter.displayValue + 1)
         } else {
-            increment = -1
+            effect.statusCounter.setValue(effect.statusCounter.displayValue - 1)
         }
-        const newValue = increment + effectCounter.getValue(tokenDoc)
-        effectCounter.setValue(newValue, tokenDoc);
     } else {
-        effectCounter = new ActiveEffectCounter(1, MODULE.iconPath + scope.event.srcElement.id + ".png", tokenDoc);
-        creationState.add(tokenDoc.id);
-        effectCounter.update(tokenDoc).finally(() => creationState.delete(tokenDoc.id));
+        let AE
+        if (actionSource.className.toLowerCase().search("plus") >= 0) {
+            AE = await ActiveEffect.fromStatusEffect(statusIdPlus)
+        } else {
+            AE = await ActiveEffect.fromStatusEffect(statusIdMinus)
+        }
+        await scope.tokens.actor.createEmbeddedDocuments("ActiveEffect", [AE]);
     }
 
 }

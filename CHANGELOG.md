@@ -1,5 +1,11 @@
 # Changelog
 
+`12.4.1.1_906`
+
+* Features:
+  * Compatibility with `Status Icon Counter` version 3.0.x for status effect
+  * If option to add/remove boost or setback dices from 'actions' is set the new status effects are added automatically in the `Assign status effects` menu
+
 `12.4.0.1_903`
 
 * Features:
