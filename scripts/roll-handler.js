@@ -95,10 +95,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     "role": "",
                 }
             }
-            const status = game.ffg.DiceHelpers.getWeaponStatus(weapon);
-            var startingPool = { 'difficulty': 2 + status.difficulty, "setback": status.setback }
-            startingPool = new DicePoolFFG(await game.ffg.DiceHelpers.getModifiers(startingPool, weapon));
-            this.rollSkill(event, this.actor, weapon.system.skill.value, foundry.utils.mergeObject(weapon, cardData), startingPool)
+            this.rollSkill(event, this.actor, weapon.system.skill.value, foundry.utils.mergeObject(weapon, cardData), { 'difficulty': 2 }, weapon)
         }
 
         /**
@@ -181,7 +178,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const [crewId, crewRole] = actionId.split(this.delimiter);
             const crewActor = game.actors.get(crewId);
             const role = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_name === crewRole);
-
             try {
                 if (crewRole === "Pilot" || role[0]?.use_handling == true) {
                     this.rollVehiclePilot(event, actor, crewId, crewRole, role)
@@ -189,7 +185,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 } else if (role[0].use_weapons == true) {
                     const items = Array.from(coreModule.api.Utils.sortItemsByName(this.actor.items).values())
                     const weapons = items.filter((weapon => weapon.type === "shipweapon"))
-
                     if (weapons.length === 0) {
                         ui.notifications.warn(game.i18n.localize("tokenActionHud.error.weaponMiss"));
                         return
@@ -270,9 +265,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     pool.ability = ability
                 }
             }
-
             if (weapon) {
-                pool = await this.getWeaponPoolModifiers(weapon, pool)
+                pool = await this.getWeaponPoolModifiers(weapon, pool, actor.system.skills[skillId])
             }
 
             if (game.settings.get(MODULE.ID, "tahst-dicesroll") == true) {
@@ -297,6 +291,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         async rollVehicleGunnery(event, crewId, crewRole, weaponId) {
             const weapon = coreModule.api.Utils.getItem(this.actor, weaponId);
+            console.log(weapon)
             // create chat card data
             const cardData = {
                 "crew": {
@@ -408,12 +403,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             return pool
         }
 
-        async getWeaponPoolModifiers(weapon, pool) {
+        async getWeaponPoolModifiers(weapon, pool, skill) {
             if (weapon?.type === "weapon" || weapon?.type === "shipweapon") {
                 const status = game.ffg.DiceHelpers.getWeaponStatus(weapon);
+                let defenseDice = game.ffg.DiceHelpers.getDefenseDice(skill, weapon);
                 pool.difficulty += status.difficulty
-                pool.setback += status.setback
+                pool.setback += status.setback + defenseDice
                 pool = new DicePoolFFG(await game.ffg.DiceHelpers.getModifiers(pool, weapon));
+
             }
             return pool
         }

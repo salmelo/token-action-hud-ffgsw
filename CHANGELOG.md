@@ -1,5 +1,11 @@
 # Changelog
 
+`12.4.2.1_906`
+
+* Fixes:
+  * Translation for the status effect dialog box title
+  * Use defense from Star Wars FFG system is now apply to dices pool from TAH weapons
+
 `12.4.1.1_906`
 
 * Features:

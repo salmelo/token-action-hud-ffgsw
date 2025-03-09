@@ -30,19 +30,6 @@ export async function register(coreUpdate) {
         requiresReload: true
     });
 
-    game.settings.register(MODULE.ID, 'tahst-addstatuseffect', {
-        name: game.i18n.localize('tokenActionHud.template.settings.statuseffect.addstatuseffect.name'),
-        hint: game.i18n.localize('tokenActionHud.template.settings.statuseffect.addstatuseffect.hint'),
-        scope: 'world',
-        config: false,
-        type: Boolean,
-        default: false,
-        onChange: (value) => {
-            location.reload();
-
-        }
-    })
-
     game.settings.register(MODULE.ID, 'tahst-dicesbonus', {
         name: game.i18n.localize('tokenActionHud.template.settings.statuseffect.dicesbonus.name'),
         hint: game.i18n.localize('tokenActionHud.template.settings.statuseffect.dicesbonus.hint'),
@@ -69,7 +56,7 @@ export async function register(coreUpdate) {
         }
     })
 
-    if (game.settings.get(MODULE.ID, "tahst-addstatuseffect") == true) {
+    if (game.settings.get(MODULE.ID, "tahst-dicesbonus") == true) {
         await addStatusEffect()
     }
 
@@ -101,7 +88,7 @@ export class StatusEffectForm extends HandlebarsApplicationMixin(ApplicationV2) 
         window: {
             minimizable: true,
             resizable: true,
-            title: "tokenActionHud.template.settings.statuseffect.name"
+            title: "tokenActionHud.template.settings.statuseffect.menu.label"
         }
     };
 
@@ -170,7 +157,6 @@ export class StatusEffectForm extends HandlebarsApplicationMixin(ApplicationV2) 
     /* -------------------------------------------- */
 
     static async submit(event, form, formData) {
-        console.log('tah submit')
         if (!game.modules.get("statuscounter").active) {
             ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.statuscounter")}`);
             return

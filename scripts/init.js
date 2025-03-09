@@ -14,7 +14,7 @@ Hooks.on('tokenActionHudCoreApiReady', async () => {
     Hooks.call('tokenActionHudSystemReady', module)
     
     Hooks.once('tokenActionHudSystemReady', async () => {
-        if (game.settings.get(MODULE.ID, "tahst-addstatuseffect") === true) {
+        if (game.settings.get(MODULE.ID, "tahst-dicesbonus") === true) {
             await addStatusEffect()
         }
     })
