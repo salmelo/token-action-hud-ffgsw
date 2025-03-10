@@ -20,6 +20,19 @@ export async function register(coreUpdate) {
         }
     })
 
+    game.settings.register(MODULE.ID, 'displayDicepool', {
+        name: game.i18n.localize('tokenActionHud.template.settings.displayDicepool.name'),
+        hint: game.i18n.localize('tokenActionHud.template.settings.displayDicepool.hint'
+        ),
+        scope: 'client',
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: (value) => {
+            coreUpdate(value)
+        }
+    })
+
     game.settings.registerMenu(MODULE.ID, "statuseffect", {
         name: game.i18n.localize("tokenActionHud.template.settings.statuseffect.menu.name"),
         hint: game.i18n.localize("tokenActionHud.template.settings.statuseffect.menu.hint"),

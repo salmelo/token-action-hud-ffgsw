@@ -2,6 +2,8 @@
 
 `12.4.2.1_906`
 
+* Features:
+  * Add an option to display dice pool in TAH. This option is active by default
 * Fixes:
   * Translation for the status effect dialog box title
   * Use defense from Star Wars FFG system is now apply to dices pool from TAH weapons

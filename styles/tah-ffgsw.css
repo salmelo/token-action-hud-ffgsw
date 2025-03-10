@@ -17,3 +17,19 @@
   right: 0;
   top:1px;
 }
+
+
+#token-action-hud-app #token-action-hud .tah-button-box .tah-button-content {
+  align-items: center;
+}
+#token-action-hud-app #token-action-hud .tah-button-box .tah-button-content .tah-info-container{
+  gap:unset;
+  justify-content: flex-end;
+}
+
+#token-action-hud-app #token-action-hud .tah-skill .tah-info-container img,
+#token-action-hud-app #token-action-hud .tah-weapon .tah-info-container img,
+#token-action-hud-app #token-action-hud .tah-crew .tah-info-container img{
+  width: 1em;
+  height: 1em;
+}

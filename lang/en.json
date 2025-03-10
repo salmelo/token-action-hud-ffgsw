@@ -15,23 +15,23 @@
           "hint": "Choose whether to display unequipped items on the HUD",
           "name": "Display Unequipped"
         },
+        "displayDicepool": {
+          "hint": "Use for characters weapons, skills and vehicle crew skill",
+          "name": "Display dice pool next the weapon or skill name"
+        },
         "statuseffect": {
           "menu": {
-            "hint": "Options for adding status effects to dices pool",
+            "hint": "For adding status effects to dice pool",
             "name": "Statuts effects",
             "label": "Configure Status effects"
           },
           "dicesroll": {
-            "hint": "",
-            "name": "Apply status effects for dices pool from TAH"
-          },
-          "addstatuseffect": {
-            "hint": "Status effects have 'TAH' in their name",
-            "name": "Adds status effects for dices pool"
+            "hint": "From TAH actions only",
+            "name": "Apply status effects to the dices pool"
           },
           "dicesbonus": {
-            "hint": "Actions can be found in the Utility tab of TAH",
-            "name": "Allows to add status effects from TAH and the 'Assign Status effects' menu"
+            "hint": "Status effects can be added from TAH utility tab or from the 'Assign Status effects' menu",
+            "name": "Allows to add status effects"
           }
         }
       },

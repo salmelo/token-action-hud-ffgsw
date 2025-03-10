@@ -1,6 +1,7 @@
 // System Module Imports
 import { ACTION_TYPE, GROUP, MACRO, MODULE } from './constants.js'
 import { Utils } from './utils.js'
+import { get_dice_pool } from "../../../systems/starwarsffg/modules/helpers/dice-helpers.js";
 
 export let ActionHandler = null
 
@@ -19,7 +20,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             // Set actor and token variables
             this.actors = (!this.actor) ? this.#getValidActors() : [this.actor]
             this.tokens = (!this.token) ? this.#getValidTokens() : [this.token]
-
+            //console.log("tah start", this.actors,this.tokens)
             // Set items variable
             if (this.actor) {
                 this.items = coreModule.api.Utils.sortItemsByName(this.actor.items);
@@ -40,6 +41,44 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 await this.#buildVehicleActions();
             } else if (!this.actor) {
                 this.#buildMultipleTokenActions()
+            }
+
+            if (game.settings.get(MODULE.ID, "displayDicepool") == true) {
+                Hooks.once('renderTokenActionHud', async (app) => {
+                    const skillElements = document.querySelectorAll(".tah-skill")
+                    const weaponElements = document.querySelectorAll(".tah-weapon")
+                    const crewElements = document.querySelectorAll(".tah-crew")
+                    const actor = this.actor
+                    const delimiter = this.delimiter
+
+                    Array.from(skillElements).forEach(function (element, index) {
+                        const container = element.querySelector(".tah-info-container")
+                        get_dice_pool(actor.id, element.dataset['actionId'], new DicePoolFFG()).renderPreview(container)
+                    });
+
+                    Array.from(weaponElements).forEach(async function (element, index) {
+                        const container = element.querySelector(".tah-info-container")
+                        const weapon = coreModule.api.Utils.getItem(actor, element.dataset['actionId']);
+                        get_dice_pool(actor.id, weapon.system.skill.value, await game.ffg.DiceHelpers.getModifiers(new DicePoolFFG(), weapon)).renderPreview(container)
+                    });
+
+                    Array.from(crewElements).forEach(async function (element, index) {
+                        const container = element.querySelector(".tah-info-container")
+                        const [crewId, crewRole] = element.dataset['actionId'].split(delimiter);
+                        const role = game.settings.get("starwarsffg", "arrayCrewRoles").filter(role => role.role_name === crewRole);
+                        let skillId = ""
+                        if (crewRole === "Pilot") {
+                            if (actor?.system?.spaceShip) {
+                                skillId = "Piloting: Space";
+                            } else {
+                                skillId = "Piloting: Planetary";
+                            }
+                        } else {
+                            skillId = role[0].role_skill
+                        }
+                        get_dice_pool(crewId, skillId, new DicePoolFFG()).renderPreview(container)
+                    });
+                })
             }
         }
 
@@ -197,6 +236,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         listName: listName,
                         img: img,
                         tooltip: tooltip,
+                        cssClass: "tah-crew",
                         system: { actionType, actionId: id }
                     })
 
@@ -298,22 +338,21 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         * @returns {object}           The action
         */
         async #getAction(entity, actionType = "item") {
-            var id = "", info = {}, tooltip = "";
+            var id = "", img = {}, info1 = {}, tooltip = "", cssClass = "";
             switch (actionType) {
                 case "skill":
                     id = entity.value;
+                    cssClass = "tah-skill"
                     break;
                 case "weapon":
+                    cssClass = "tah-weapon"
                 case "shipweapon":
                     id = entity._id;
-                    //info = this.#getItemInfo(entity);
                     tooltip = await this.#getTooltip(await this.#getWeaponTooltipData(entity));
                     break;
             }
 
             let name = entity?.name ?? entity?.label;
-            let cssClass = "";
-
             return {
                 id,
                 name,
@@ -322,9 +361,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 // icon1: this.#getActivationTypeIcon(entity.system?.activities?.contents[0]?.activation.type),
                 // icon2: this.#getPreparedIcon(entity),
                 // icon3: this.#getConcentrationIcon(entity),
-                // info1: info?.info1,
-                // info2: info?.info2,
-                // info3: info?.info3,
+                //info1: info1,
+                //info2: info?.info2,
+                //info3: info?.info3,
                 listName: this.#getListName(actionType, name),
                 tooltip,
                 system: { actionType, actionId: id }
@@ -450,3 +489,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
 
 })
+
+
+

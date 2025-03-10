@@ -14,6 +14,25 @@
         "displayUnequipped": {
           "hint": "Sélectionner pour afficher les armes non équipées",
           "name": "Afficher non-équipé"
+        },
+        "displayDicepool": {
+          "hint": "Use for characters weapons, skills and vehicle crew skill",
+          "name": "Display dice pool next the weapon or skill name"
+        },
+        "statuseffect": {
+          "menu": {
+            "hint": "Pour ajouter les effets d'état au pool de dés",
+            "name": "Effets d'état",
+            "label": "Configure les effets d'état"
+          },
+          "dicesroll": {
+            "hint": "Depuis les actions de TAH seulement",
+            "name": "Appliquer les effets d'état aux jets de dés"
+          },
+          "dicesbonus": {
+            "hint": "Les effets d'état peuvent être ajouter depuis les actions TAH ou depuis le menu 'Attribuer des effets d'état'",
+            "name": "Permet d'ajouter des effets d'état"
+          }
         }
       },
       "dices":"Dés de bonus / malus"
@@ -38,6 +57,10 @@
         "name": "Infortune",
         "actionAdd": "Ajouter",
         "actionReduce": "Retirer"
+      },
+      "action": {
+        "miss": "Vous devez clicker sur les icons 'plus' ou 'moins'",
+        "selectMiss": "Vous devez sélectionner un token et un seul"
       }
     },
     "statuseffects":{
