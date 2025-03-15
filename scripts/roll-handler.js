@@ -291,7 +291,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          */
         async rollVehicleGunnery(event, crewId, crewRole, weaponId) {
             const weapon = coreModule.api.Utils.getItem(this.actor, weaponId);
-            console.log(weapon)
             // create chat card data
             const cardData = {
                 "crew": {
