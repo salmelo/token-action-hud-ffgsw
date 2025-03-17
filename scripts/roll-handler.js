@@ -56,7 +56,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} token
          * @param {string} actionId
          */
-        async handleAction(event, actionType, actor, token, actionId) {
+        async handleAction(event, actionType, actor, token, actionId) {            
             switch (actionType) {
                 case "crewSkill":
                     this.crewAction(event, actor, actionId); break;
@@ -248,6 +248,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
          * @param {object} weapon       The weapon
          */
         async rollSkill(event, actor, skillId, cardData = null, startingPool = { 'difficulty': 2 }, weapon) {
+            
             const actorSheet = await actor.sheet.getData();
             let pool = new DicePoolFFG(startingPool);
             const skillName = skillsList[skillId]?.label ? skillsList[skillId].label : actor.system.skills[skillId].label
@@ -387,9 +388,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.statuscounter")}`);
                 return pool
             }
+
             for (const [id, effectData] of Object.entries(STATUSEFFECT)) {
                 if (effectData.pooleffectdice) {
-                    let addedValue = EffectCounter.findCounterValue(token.document, effectData.img)
+                    
+                    let addedValue = ActiveEffectCounter.getCounters(token).find(effect => effect.counter.parent.statuses.first() === effectData.id)?.getDisplayValue();
                     if (effectData.pooleffectaction === "add" && addedValue > 0) {
                         pool[effectData.pooleffectdice] += addedValue > 0 ? addedValue : 0
                     } else {

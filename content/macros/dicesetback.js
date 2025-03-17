@@ -25,18 +25,14 @@ async function main() {
         return
     }
 
-    var increment = 0
-    let tokenDoc = scope.tokens.document;
-    let iconPathPlus = MODULE.iconPath + "dicesetback-plus.png"
-    let iconPathMinus = MODULE.iconPath + "dicesetback-minus.png"
     let statusIdPlus = "dicesetback-plus-tah"
     let statusIdMinus = "dicesetback-minus-tah"
-    let effect = scope.tokens.actor.effects.find(e => e.img === iconPathPlus) || scope.tokens.actor.effects.find(e => e.img === iconPathMinus)
+    let effect = scope.tokens.actor.effects.find(e => e.statuses.first() === statusIdPlus) || scope.tokens.actor.effects.find(e => e.statuses.first() === statusIdMinus)
 
     if (effect) {
         //check if the call is to Add or reduce dices
-        if ((actionSource.className.toLowerCase().search("plus") >= 0 && effect.img === iconPathPlus)
-            || (actionSource.className.toLowerCase().search("minus") >= 0 && effect.img === iconPathMinus)) {
+        if ((actionSource.className.toLowerCase().search("plus") >= 0 && effect.statuses.first() === statusIdPlus)
+            || (actionSource.className.toLowerCase().search("minus") >= 0 && effect.statuses.first() === statusIdMinus)) {
             effect.statusCounter.setValue(effect.statusCounter.displayValue + 1)
         } else {
             effect.statusCounter.setValue(effect.statusCounter.displayValue - 1)

@@ -24,16 +24,15 @@ async function main() {
         ui.notifications.warn(`${game.i18n.localize(MODULE.localizeID + ".error.statuscounter")}`);
         return
     }
-    let iconPathPlus = MODULE.iconPath + "diceboost-plus.png"
-    let iconPathMinus = MODULE.iconPath + "diceboost-minus.png"
+
     let statusIdPlus = "diceboost-plus-tah"
     let statusIdMinus = "diceboost-minus-tah"
-    let effect = scope.tokens.actor.effects.find(e => e.img === iconPathPlus) || scope.tokens.actor.effects.find(e => e.img === iconPathMinus)
+    let effect = scope.tokens.actor.effects.find(e => e.statuses.first() === statusIdPlus) || scope.tokens.actor.effects.find(e => e.statuses.first() === statusIdMinus)
 
     if (effect) {
         //check if the call is to Add or reduce dices
-        if ((actionSource.className.toLowerCase().search("plus") >= 0 && effect.img === iconPathPlus)
-            || (actionSource.className.toLowerCase().search("minus") >= 0 && effect.img === iconPathMinus)) {
+        if ((actionSource.className.toLowerCase().search("plus") >= 0 && effect.statuses.first() === statusIdPlus)
+            || (actionSource.className.toLowerCase().search("minus") >= 0 && effect.statuses.first() === statusIdMinus)) {
             effect.statusCounter.setValue(effect.statusCounter.displayValue + 1)
         } else {
             effect.statusCounter.setValue(effect.statusCounter.displayValue - 1)

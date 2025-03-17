@@ -65,12 +65,12 @@ export const ITEM_TYPE = {
 export const MACRO = {
     strainRecovery: { id: 'stressRecovery', name: MODULE.localizeID + ".macros.strainRecovery.name", type: 'script', groupId: "utility", img: "icons/svg/regen.svg" },
     diceboost: {
-        id: 'diceboost', name: MODULE.localizeID + ".macros.boost.name", type: 'script', groupId: "Dices", img: "systems/starwarsffg/images/dice/starwars/blue.png",
+        id: 'diceboost', name: MODULE.localizeID + ".macros.boost.name", type: 'script', groupId: "Dices", img: MODULE.iconPath + "diceboost.png",
         cssClass: "minus-plus", icon1: '<i id="diceboost-minus" class="fas fa-minus"></i>', icon2: '<i id="diceboost-plus" class="fas fa-plus"></i>',
         conditionSetting:"tahst-dicesbonus"
     },
     dicesetback: {
-        id: 'dicesetback', name: MODULE.localizeID + ".macros.setback.name", type: 'script', groupId: "Dices", img: "systems/starwarsffg/images/dice/starwars/black.png",
+        id: 'dicesetback', name: MODULE.localizeID + ".macros.setback.name", type: 'script', groupId: "Dices", img: MODULE.iconPath + "dicesetback.png",
         cssClass: "minus-plus", icon1: '<i id="dicesetback-minus" class="fas fa-minus"></i>', icon2: '<i id="dicesetback-plus" class="fas fa-plus"></i>',
         conditionSetting:"tahst-dicesbonus"
     },

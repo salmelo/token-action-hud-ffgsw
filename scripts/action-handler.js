@@ -20,7 +20,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             // Set actor and token variables
             this.actors = (!this.actor) ? this.#getValidActors() : [this.actor]
             this.tokens = (!this.token) ? this.#getValidTokens() : [this.token]
-            //console.log("tah start", this.actors,this.tokens)
+
             // Set items variable
             if (this.actor) {
                 this.items = coreModule.api.Utils.sortItemsByName(this.actor.items);

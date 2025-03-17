@@ -1,5 +1,12 @@
 # Changelog
 
+`12.4.3.1_906`
+
+* Features:
+  * Use status Id instead of image path to define roll pool
+  * Check if status Id already exists in the list of status effect before add the new ones. Now image and name can be modified.
+  * Change icons for dices. Thanks to @ercete
+
 `12.4.2.1_906`
 
 * Features:
