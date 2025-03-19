@@ -87,15 +87,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async weaponAction(event, actor, actionId) {
             const weapon = coreModule.api.Utils.getItem(actor, actionId);
 
-            const cardData = {
-                "crew": {
-                    "name": this.actor.name,
-                    "img": this.actor.img,
-                    "crew_card": true,
-                    "role": "",
-                }
-            }
-            this.rollSkill(event, this.actor, weapon.system.skill.value, foundry.utils.mergeObject(weapon, cardData), { 'difficulty': 2 }, weapon)
+            this.rollSkill(event, this.actor, weapon.system.skill.value, weapon, { 'difficulty': 2 }, weapon)
         }
 
         /**
