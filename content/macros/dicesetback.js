@@ -38,13 +38,11 @@ async function main() {
             effect.statusCounter.setValue(effect.statusCounter.displayValue - 1)
         }
     } else {
-        let AE
         if (actionSource.className.toLowerCase().search("plus") >= 0) {
-            AE = await ActiveEffect.fromStatusEffect(statusIdPlus)
+            await scope.tokens.actor?.toggleStatusEffect(statusIdPlus);
         } else {
-            AE = await ActiveEffect.fromStatusEffect(statusIdMinus)
+            await scope.tokens.actor?.toggleStatusEffect(statusIdMinus);
         }
-        await scope.tokens.actor.createEmbeddedDocuments("ActiveEffect", [AE]);
     }
 
 }

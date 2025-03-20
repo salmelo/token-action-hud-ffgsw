@@ -2,6 +2,7 @@
 import { ACTION_TYPE, GROUP, MACRO, MODULE } from './constants.js'
 import { Utils } from './utils.js'
 import { get_dice_pool } from "../../../systems/starwarsffg/modules/helpers/dice-helpers.js";
+import { skills as skillsList } from "../../../systems/starwarsffg/modules/config/ffg-skills.js";
 
 export let ActionHandler = null
 
@@ -411,16 +412,24 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         async #getWeaponTooltipData(entity) {
             if (this.tooltipsSetting === "none") return "";
 
-            const name = entity?.name ?? "";
+            if (this.tooltipsSetting === "nameOnly") return entity?.name ?? entity?.label
 
-            if (this.tooltipsSetting === "nameOnly") return name;
+            const name = entity?.name ?? entity?.label;
             const damage = entity?.system?.damage.adjusted
             const crit = entity?.system?.crit.adjusted
-            const range = entity?.system?.range.label;
-            //const skill = entity?.system?.skill.value;
+            const range = entity?.system?.range.label
+            const skill = skillsList[entity?.system?.skill.value]?.label ? skillsList[entity?.system?.skill.value].label : actor.system.skills[entity?.system?.skill.value].label
+            const firingArc = entity?.system?.firingarc
+            let firingArcText = firingArc?.fore === true ? game.i18n.localize("SWFFG.VehicleFiringArcForward") + " " : ""
+            firingArcText += firingArc?.aft === true ? game.i18n.localize("SWFFG.VehicleFiringArcAft") + " " : ""
+            firingArcText += firingArc?.port === true ? game.i18n.localize("SWFFG.VehicleFiringArcPort") + " " : ""
+            firingArcText += firingArc?.starboard === true ? game.i18n.localize("SWFFG.VehicleFiringArcStarboard") + " " : ""
+            firingArcText += firingArc?.dorsal === true ? game.i18n.localize("SWFFG.VehicleFiringArcDorsal") + " " : ""
+            firingArcText += firingArc?.ventral === true ? game.i18n.localize("SWFFG.VehicleFiringArcVentral") + " " : ""
+
             //const description = (typeof entity?.system?.description === "string") ? entity?.system?.description : (unidentified ? entity?.system?.unidentified?.description : entity?.system?.description?.value) ?? "";
 
-            return { name, damage, crit, range };
+            return { name, damage, crit, range, skill, firingArcText };
         }
 
         /**
@@ -438,10 +447,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             const nameHtml = `<h3>${name}</h3>`;
 
-            // const skillHtml = tooltipData?.skill
-            //     ? `<span class="tah-tag}">${game.i18n.localize("SWFFG.ItemWeaponSkill")} ${game.i18n.localize(tooltipData.skill)}</span>`
-            //     : "";
-
             const rangeHtml = tooltipData?.range
                 ? `<div class="tah-properties">${game.i18n.localize("SWFFG.ItemsRange")} ${game.i18n.localize(tooltipData.range)}</div>`
                 : "";
@@ -454,8 +459,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 ? `<div class="tah-properties">${game.i18n.localize("SWFFG.ItemsCrit")} ${tooltipData?.crit}</div>`
                 : "";
 
+            const skillHtml = tooltipData?.skill
+                ? `<div class="tah-properties">${game.i18n.localize("SWFFG.ItemsSkill")} ${game.i18n.localize(tooltipData.skill)}</div>`
+                : "";
 
-            const tagsJoined = [rangeHtml, damageHtml, critHtml].join("");
+            const firincArcHtml = tooltipData?.firingArcText
+                ? `<div class="tah-properties">${game.i18n.localize("SWFFG.VehicleTabFiringArc")} ${tooltipData.firingArcText}</div>`
+                : "";
+
+            const tagsJoined = [rangeHtml, damageHtml, critHtml, skillHtml, firincArcHtml].join("");
 
             const tagsHtml = (tagsJoined) ? `<div class="tah-tags">${tagsJoined}</div>` : "";
 

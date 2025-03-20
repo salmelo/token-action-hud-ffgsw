@@ -1,5 +1,13 @@
 # Changelog
 
+`12.4.4.1_906`
+
+* Features:
+  * Add weapon skill to tooltip
+  * Add firing arcs arcs for vehicle weapon to tooltip
+* Fixes:
+  * Status effects dice in roll pool when counter is not displayed (ie. value egals 1)
+
 `12.4.3.1_906`
 
 * Features:

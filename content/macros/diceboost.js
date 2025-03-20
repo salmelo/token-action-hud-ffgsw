@@ -28,7 +28,7 @@ async function main() {
     let statusIdPlus = "diceboost-plus-tah"
     let statusIdMinus = "diceboost-minus-tah"
     let effect = scope.tokens.actor.effects.find(e => e.statuses.first() === statusIdPlus) || scope.tokens.actor.effects.find(e => e.statuses.first() === statusIdMinus)
-
+    console.log(effect)
     if (effect) {
         //check if the call is to Add or reduce dices
         if ((actionSource.className.toLowerCase().search("plus") >= 0 && effect.statuses.first() === statusIdPlus)
@@ -38,13 +38,11 @@ async function main() {
             effect.statusCounter.setValue(effect.statusCounter.displayValue - 1)
         }
     } else {
-        let AE
         if (actionSource.className.toLowerCase().search("plus") >= 0) {
-            AE = await ActiveEffect.fromStatusEffect(statusIdPlus)
+            await scope.tokens.actor?.toggleStatusEffect(statusIdPlus);
         } else {
-            AE = await ActiveEffect.fromStatusEffect(statusIdMinus)
+            await scope.tokens.actor?.toggleStatusEffect(statusIdMinus);
         }
-        await scope.tokens.actor.createEmbeddedDocuments("ActiveEffect", [AE]);
     }
 
 }
