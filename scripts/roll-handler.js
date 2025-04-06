@@ -384,7 +384,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             for (const [id, effectData] of Object.entries(STATUSEFFECT)) {
                 if (effectData.pooleffectdice) {
                     
-                    let addedValue = ActiveEffectCounter.getCounters(token).find(effect => effect.counter.parent.statuses.first() === effectData.id)?.getDisplayValue();
+                    let addedValue = ActiveEffectCounter.getCounters(token).find(effect => effect.counter.parent.statuses.first() === effectData.id)?.getValue();
                     if (effectData.pooleffectaction === "add" && addedValue > 0) {
                         pool[effectData.pooleffectdice] += addedValue > 0 ? addedValue : 0
                     } else {
